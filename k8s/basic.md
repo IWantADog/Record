@@ -124,8 +124,33 @@ k8s通过配置`Docker`使一个`pod`中的所有`container`共享一个linux na
 
 DaemonSets会在每一个`node`上部署一个执行特定任务的`pod`。当一个新的node被启动时，`DaemonSets`会自动部署一个新的实例到该`node`中。
 
-`DaemonSets`也可以指明仅部署pod到特定的node上(通过`node-Selector`设置)。
+`DaemonSets`也可以指明仅部署pod到特定的node上(通过`node-Selector`设置)。而如果一个node在部署了`DaemonSets`的pod之后，又被移除了`label`，部署的pod会被关闭。
 
+**如果关闭`DaemonSet`，相关联的所有`pod`都会被删除。**
+
+### 额外的情况
+
+k8s中存在拒绝`pod`部署的`node`。对于这样的`node`，`DaemonSet`依然会部署在上面。其中的原理是，拒绝`pod`部署的`node`是通过阻止`schedule`向指定的`node`来实现的。而通过`DaemonSet`部署的`pod`会完全绕过`schedule`。
+
+### how to use
+
+// 查看指定的`DaemonSet`
+
+kubectl get ds
+
+## about Job
+
+`Job`是只运行一次的`pod`。
+
+当运行`job`的`node`故障时，`job`会被移动到其他的`node`运行。
+
+当`job`由于自身的问题导致运行失败时，可以通过配置指定`job`是否重新运行。
+
+### how to use
+
+// 查看指定`Job`
+
+kubectl get jobs
 
 ## how to use
 

@@ -1,5 +1,7 @@
 # k8s 常用command
 
+kubectl exec: 在pod中执行命令
+
 kubectl cluster-info
 
 kubectl get nodes/pods

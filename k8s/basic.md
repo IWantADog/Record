@@ -140,11 +140,22 @@ kubectl get ds
 
 ## about Job
 
-`Job`是只运行一次的`pod`。
+`Job`通过`pod`运行任务，`job`运行完成后pod就会被删除。
 
-当运行`job`的`node`故障时，`job`会被移动到其他的`node`运行。
+### 特性
 
-当`job`由于自身的问题导致运行失败时，可以通过配置指定`job`是否重新运行。
+- 当运行`job`的`node`故障时，`job`会被移动到其他的`node`运行。
+- 当`job`由于自身的问题导致运行失败时，可以通过配置指定`job`是否重新运行。
+- `job`可以指定 **`pod`运行多次** 和 **多个`pod`同时运行**。
+    - spec.completions: 设置`pod`需要被运行的次数。
+        > 需要注意的多次运行pod时，每次用的都是新的pod。也就是说任务需要运行N次，就会创建N个`pod`。并且如果`pod`运行失败，最后实际创建的`pod`数量可能大于需要执行的任务次数。
+    - spec.parallelism: 设置需要同时运行的pod数量。
+        > job支持运行中修改并行pod的数量。
+- 指定运行时间限制`activeDeadlineSeconds`，如果实际运行时间超过了指定的时间，job会被标记为失败。
+
+## About CronJob
+
+定时运行的`job`。
 
 ### how to use
 

@@ -5,7 +5,7 @@ https://docs.gunicorn.org/en/latest/index.html
 TODO: `gunicorn`的相关内容需要单独新建一个文件记录，现在放在这里只是方便。
     - 先这样吧，gunicorn相关的内容就这些。暂时先不动了。
 
-画了一个uml图放在upload/gunicorn.mdj。（可能用得上）
+画了一个uml图放在python/pep/upload/gunicorn.mdj。（可能用得上）
 
 ## running gunicorn
 

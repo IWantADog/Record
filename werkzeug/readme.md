@@ -1,3 +1,10 @@
 # werkzeug
 
-https://werkzeug.palletsprojects.com/en/2.0.x/test/
+## reading process
+
+- [x] Serving and Testing
+- [x] Testing WSGI Applications
+- [x] Debugging Applications
+- [x] Request / Response Objects
+- [] URL Routing
+

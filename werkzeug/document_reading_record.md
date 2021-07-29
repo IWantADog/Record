@@ -71,3 +71,21 @@ request的常用属性
 
 
 
+## URL Routing
+
+MapAdapter
+
+MapAdapter.bind_to_environ(environ)
+
+MapAdapter.match()
+
+### Rule Format
+`<converter(arguments):name>`
+
+### Built-in Converters
+
+`werkzeug`内置的转换器，也可以覆盖或是扩展转换器。
+
+- werkzeug.routing.UnicodeConverter: string，不可包含`/`
+- werkzeug.routing.PathConverter: 和string类型相识，可以包含`/`
+

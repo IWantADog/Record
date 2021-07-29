@@ -86,6 +86,9 @@ MapAdapter.match()
 
 `werkzeug`内置的转换器，也可以覆盖或是扩展转换器。
 
-- werkzeug.routing.UnicodeConverter: string，不可包含`/`
-- werkzeug.routing.PathConverter: 和string类型相识，可以包含`/`
-
+- werkzeug.routing.UnicodeConverter: 仅接受string，不可包含`/`，默认设置
+- werkzeug.routing.PathConverter: 和string类型相似，可以包含`/`
+- werkzeug.routing.AnyConverter: 匹配多个可能的结果
+- werkzeug.routing.IntegerConverter: 仅接受int，支持正数和负数(需要单独配置)
+- werkzeug.routing.FloatConverter: 仅接受float
+- werkzeug.routing.UUIDConverter: 仅接受uuid

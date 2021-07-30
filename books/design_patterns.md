@@ -124,13 +124,22 @@ TODO: 感觉想不到合适的使用场景，先这样吧。
 **将一个请求封装为一个对象**
 
 要点：
-- `Invoker`接受`Command`实例，并在内部维持。`Invoker`仅仅调用command暴露的公用接口。
-- `Command`实例中维持`Receiver`实例。
-- 每个`Command`实例可能一次调用多个`receiver`方法。
+- `Invoker`接受`Command`实例，并在内部维持。`Invoker`仅仅调用`Command`暴露的公用接口。
+- `Command`实例中维持`Receiver`实例。并且暴露公用的接口，供`Invoker`调用。
+- 每个`Command`实例可能一次调用多个`Receiver`方法。
 
 `command`模式的实现是建立在`Receiver`拥有合理的公共接口的基础上的，不然所有`Receiver`都需要对应一个`command`。
 
 我之前对`command`模式的理解是：简单的将需要执行的命令和数据通过结构体的形式传递给`receiver`，`receiver`通过解析结构体获取`方法标识`和`数据`，通过方法标识寻找相应的方法，并将数据作为参数调用方法。
+
+实现：
+1. 一个命令应该达到何种的智能程度。
+
+    一种极端是一个`command`仅包含一个接受者和执行该请求的动作。另一种极端是没有接受者，所有的功能都由`command`自身实现。
+
+    在这两个极端之间的情况是`command`有足够的信息可以找到`invoker`。
+
+2. 支持实现`undo`和`redo`。内部存储`invoker`的状态，`command`可以被`reverse`。
 
 
 

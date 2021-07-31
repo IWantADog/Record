@@ -32,7 +32,9 @@ TODO: 虚拟ip，当ip和port同时存在时才有意义。
 
 ## Connecting to service living outside the cluster
 
-`service`不仅仅可以在集群内部重定向请求，也可以将请求重定向到集群外部。
+`service`不仅可以将进入集群内部的请求重定向，也可以将内部的请求重定向到集群外部。
+
+> 对于重定向到外部的请求，简单点理解就是在集群内部定义一个`service`，这个`service`后边对接的就是集群外部的`API`。
 
 ### service endpoints
 
@@ -43,8 +45,30 @@ TODO: 虚拟ip，当ip和port同时存在时才有意义。
 
 这里还涉及到service的`label-selector`。`endpoints`中的`ip:port`列表就是根据`label-selector`获取的。当请求连接到`service`，service proxy会从endpoints中选择一个`ip:port`将请求重定向。
 
-### 手动修改service endpoints
+## Exposing services to external clients
 
+将service暴露给外部。
+- `NodePort`
+    
+    对于一个`Nodeport`服务，集群中的每个`node`都会开放一个端口并且将经过这个端口的所有请求都重定向到下层的服务。
+
+    > `NodePort` service不仅仅可以通过被分配的静态ip连接，也可通过`node`的ip和暴露的port访问。
+
+- `LoadBalancer`
+
+    `NodePort`类型的扩展。需要云服务提供商提供负载均衡功能。如果无法提供负载均衡功能，则`LoadBalancer`实际功能会退化为`NodePort`。
+
+    `LoadBalancer`的主要功能是保证请求始终会进入一个正常运行的`node`，不会因为某个`node`的崩溃导致请求无法被相应。
+
+- `Ingress`
+
+    在http层进行操作。
+
+### 关于`externalTrafficPolicy`
+
+当一个请求通过`service`随机选择了一个`pod`时，选中的`pod`可能并不运行在相同的`node`。这时请求为了找到被分配的pod，会花费额外的时间并且这并不是我们希望的。
+
+为了防止这种情况的发生，可以设置`externalTrafficPolicy: Local`。当一个外部的请求进入时`service`会从当前`node`上选择一个`pod`，如果不存在一个pod，请求会被挂起。
 
 
 ## related command

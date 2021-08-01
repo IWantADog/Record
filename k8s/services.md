@@ -62,7 +62,26 @@ TODO: 虚拟ip，当ip和port同时存在时才有意义。
 
 - `Ingress`
 
-    在http层进行操作。
+    详细参见 -- 关于`Ingress`
+
+### 关于`Ingress`
+
+从概念上讲，`Ingress`位于`Servers`的更上层。
+
+request -> Ingress -> Service -> Endpoint -> pod
+
+#### 理解为什么需要`Ingresses`
+
+一个很重要的理由是每个`LoabBalancer` service都需要一个专属于它的公开ip。而`Ingress`仅需一个ip地址。
+
+当请求进入`Ingress`时，`Ingress`可以根据`host`和`path`将不同的请求重定向到合适的`service`。
+
+并且`Ingress`作用在`http`层可以提供一些基于cookies的功能。
+
+#### 关于`Ingress Controller`
+
+如果想要`Ingress`工作，必须要有一个`Ingress Controller`存在集群内部。这个功能一般由云厂商提供。
+
 
 ### 关于`externalTrafficPolicy`
 
@@ -70,13 +89,22 @@ TODO: 虚拟ip，当ip和port同时存在时才有意义。
 
 为了防止这种情况的发生，可以设置`externalTrafficPolicy: Local`。当一个外部的请求进入时`service`会从当前`node`上选择一个`pod`，如果不存在一个pod，请求会被挂起。
 
+### 通过`Ingress`暴露多个services
+
+Ingress支持两种方式
+- 通过指定`path`
+- 通过指定`host`
+
 
 ## related command
 
 kubectl expose
 
-kubectl get svc
+kubectl get svc/ingresses
 
 kubectl exec
 
 kubectl get endpoints <service_name>
+
+kubectl create secret tls
+

@@ -96,6 +96,34 @@ Ingress支持两种方式
 - 通过指定`host`
 
 
+## 检测pod是否准备好接受连接
+
+对于某些pod，启动之后可能需要一些时间加载数据或是配置文件。这个时候`pod`还不能接受请求。
+
+> 核心的目的是保证所有能被访问到的pod都在正常运行。
+
+### 关于`readiness probes`
+
+类似于`liveness probes`，原理相似。不过最重要的区别是，如果`liveness probes`得到失败的返回值，pob会被终止并被替换。而`readiness probe`则不会这样。
+
+`readiness probes`会被周期的调用确定是否pod准备好接受请求。
+
+## 检测无法通过service连接到pod的常用步骤
+1. 尝试在集群内部通过ip直连`service`，确保service正常运行。
+2. 不要尝试通过`ping`检测`service`是否正常运行。
+    > service的ip是虚拟ip，需要和port同时使用才有意义。
+
+3. 检测service的endpoint是否正常。确保service下面有pod运行。
+4. 如果对pod定义了`readiness probe`，确保probe获得正确的相应。确保pod准备就绪
+5. 确保使用的是service的port，而不是pod的port。
+6. 尝试直接通过pod ip连接pod，检测pod正常运行
+7. 如果不能连接到pod，检测app是否仅监听了本地。
+
+### Readiness probes的种类
+- Exec probe
+- http probe
+- tcp socket probe
+
 ## related command
 
 kubectl expose

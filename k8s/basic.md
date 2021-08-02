@@ -82,16 +82,6 @@ k8s通过配置`Docker`使一个`pod`中的所有`container`共享一个linux na
 类似于存在一`main container`和多个`support container`的结构。support的功能可能类似于日志收集、文件下载和存储等。
 > 书中这里提到了`sidecar`
 
-
-## 关于Service的功能
-
-pod是易变的，可能随时挂起。当新的pod被创建时，pod会获得一个新的ip地址。如果直接通过pod的ip连接pod，会导致新建pod之后原有的ip完全不可用。
-
-Service就提供了这样的功能。在Service的整个声明周期中它始终有一个静态ip。当需要连接一个pod时，间接通过Service访问pod。Service始终保证pod可以被访问，而无论pod具体在哪里。
-
-Service还能为多个pod同时提供服务，当一个请求进来时会被转接到某一个pod上。
-
-
 ## labels
 
 labels在k8s中用来分类管理不同的资源。一个资源可能有多个labels。

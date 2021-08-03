@@ -35,7 +35,21 @@
 - persistentVolumeClaim: a way to use a pre- or dynamically provisioned persistent storage.
 
 
+## hostPath
 
+将`work node`的文件系统挂载到该node上的pod上。
 
+`hostPath`是一种**持久化**的存储方式。它不同于`emptyDir` & `gitRepo`，即使pod被删除数据仍然存在。新建的pod如果被 __分配到相同的node且挂载在相同的volumes__，可以访问之前pod留下的数据。
 
+虽然是一种持久化的数据存储方式，但这种方式是对node敏感的，即新的pod必须分配到指定的node上才能拿到指定的数据，数据与node是紧密绑定的。
 
+> hostPath只应该在读取系统文件的时候被使用。不应该用来在不同的pod之间共享数据。
+
+## google、aws、azure
+云服务商提供的持久化数据存储方式，的确好用。不过也造成了pod与特定的k8s集群绑定，因为使用不同持久化存储技术的pod在不同的云平台上是不兼容的。
+
+## sidecar container
+
+对于想要保证git仓库实时更新的需求，可以通过使用`sidecar container`来实现。
+
+由于保证git仓库实时更新的逻辑与业务逻辑无关，所以它不应该放在运行业务逻辑的container，可以单独使用一个`sidecar`容器来保证数据是最新的。

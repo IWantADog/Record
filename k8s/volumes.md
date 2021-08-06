@@ -53,3 +53,9 @@
 对于想要保证git仓库实时更新的需求，可以通过使用`sidecar container`来实现。
 
 由于保证git仓库实时更新的逻辑与业务逻辑无关，所以它不应该放在运行业务逻辑的container，可以单独使用一个`sidecar`容器来保证数据是最新的。
+
+## 对pod和底层存储技术解耦
+
+### PersistentVolumes & PersistentVolumeClaims
+
+

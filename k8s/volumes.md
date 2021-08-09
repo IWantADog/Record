@@ -4,7 +4,7 @@
 
 `volumes`可以使数据在不同的pod之间共享。__`volumes`并不像pod一样是k8s的资源，它是pod的一部分，并且与pod拥有相同的生命周期。也就说，当pod被删除是volume也会被删除，当pod重启时，还可以拿到之前pod操作的数据。__
 
-一个pod中的任意容器都可以使用`volumes`，不过使用之前需要先将`volumes`挂载到指定的`container`。
+如果一个pod中存在多个`container`，所有的`container`都可以访问挂载在pod上的`volumes`，不过使用之前需要先将`volumes`挂载到指定的`container`。
 
 ## volumes的种类
 
@@ -60,4 +60,19 @@
 
 cluster administrator通过`PersistentVolumes`定义可用资源。developer通过`PersistentVoilmeClaims`申请`administrator`定义的资源，包含资源大小、使用方式等。
 
+`persistentVolumes`并不属于特定的`namespace`。它们属于集群层面的资源，类似`node`。而`persistentvolumes`能被声明仅属于某个特定的`namespace`，仅在特定的`namespace`下才能被访问。
+
 `PersistentVolume`的使用是互斥的，只有当绑定在其上的`PersistentVolumeClaim`被删除之后，才可复用。
+
+`pvc`是`Persistentvolumeclaim`的简写。
+
+`PersistentVolume`的访问方式：
+- RWO: `ReadWriteOnce`，仅支持一个`node`挂载到该`volume`进行读写。
+- ROX: `ReadOnlyMany`，支持多个`node`同时挂载到该`volume`进行读操作。
+- RWX: `ReadWriteMany`，支持多个`node`同时挂载到该`volume`进行读写。
+ 
+当pod使用了`pvc`并且向其中写入了数据。当pod和相应的pvc被删除时，pv会进入`realsed`的状态，如果访问方式为`RWO`，由于pv此时存在数据，则无法向当前的pv申请新的pvc。这种情况需要`administarter`删除其中的数据。
+
+`PersistentVolumes`的`persistentVoulmeReclaimPolicy`属性:
+- Retain: 保留pv，后续的pod可以使用之前pod留下的数据。
+- Recycle: 

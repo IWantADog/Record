@@ -58,4 +58,6 @@
 
 ### PersistentVolumes & PersistentVolumeClaims
 
+cluster administrator通过`PersistentVolumes`定义可用资源。developer通过`PersistentVoilmeClaims`申请`administrator`定义的资源，包含资源大小、使用方式等。
 
+`PersistentVolume`的使用是互斥的，只有当绑定在其上的`PersistentVolumeClaim`被删除之后，才可复用。

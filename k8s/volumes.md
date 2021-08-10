@@ -8,7 +8,7 @@
 
 ## volumes的种类
 
-- emptyDir: 空文件
+- emptyDir: 空文件，实际的数据存储在worker node的硬盘上。
     > `medium: Memory`将文件存储在内存而不是文件系统中。
 - hostPath: 挂载`work node`的文件系统到`pod`上。
 - gitRepo: git仓库。本质上是在`emptyDir`上的扩展，首先clone一个git repo，再切换到指定的分支上。
@@ -58,21 +58,26 @@
 
 ### PersistentVolumes & PersistentVolumeClaims
 
+**PersistentVolumes和PersistentVolumeClaims都是k8s的资源，是和pod同级的存在。**
+
 cluster administrator通过`PersistentVolumes`定义可用资源。developer通过`PersistentVoilmeClaims`申请`administrator`定义的资源，包含资源大小、使用方式等。
 
-`persistentVolumes`并不属于特定的`namespace`。它们属于集群层面的资源，类似`node`。而`persistentvolumes`能被声明仅属于某个特定的`namespace`，仅在特定的`namespace`下才能被访问。
+`persistentVolumes`并不属于特定的`namespace`。它们属于集群层面的资源，类似`node`。而`persistentvolumes`需要被声明仅属于某个特定的`namespace`，仅在特定的`namespace`下才能被访问。
 
-`PersistentVolume`的使用是互斥的，只有当绑定在其上的`PersistentVolumeClaim`被删除之后，才可复用。
-
-`pvc`是`Persistentvolumeclaim`的简写。
+> `pvc`是`Persistentvolumeclaim`的简写。
 
 `PersistentVolume`的访问方式：
 - RWO: `ReadWriteOnce`，仅支持一个`node`挂载到该`volume`进行读写。
+    > `PersistentVolume`的使用是互斥的，只有当绑定在其上的`PersistentVolumeClaim`被删除之后，才可复用。
 - ROX: `ReadOnlyMany`，支持多个`node`同时挂载到该`volume`进行读操作。
 - RWX: `ReadWriteMany`，支持多个`node`同时挂载到该`volume`进行读写。
  
-当pod使用了`pvc`并且向其中写入了数据。当pod和相应的pvc被删除时，pv会进入`realsed`的状态，如果访问方式为`RWO`，由于pv此时存在数据，则无法向当前的pv申请新的pvc。这种情况需要`administarter`删除其中的数据。
 
-`PersistentVolumes`的`persistentVoulmeReclaimPolicy`属性:
-- Retain: 保留pv，后续的pod可以使用之前pod留下的数据。
-- Recycle: 
+`PersistentVolumes`的`persistentVolumeReclaimPolicy`属性:
+- Retain: 保留pv，需要手动删除存储的数据。
+    > 当pod使用了`pvc`并且向其中写入了数据。而pod和相应的pvc被删除时，Retain属性的pv会进入`realsed`状态，如果访问方式为`RWO`，由于pv此时存在数据，则无法向当前的pv申请新的pvc。这种情况需要`administarter`删除其中的数据。
+- Recycle: 当pvc被删除时，删除保存的数据，并使pv再次可用。
+- Delete: pvc被删除时，pv也会被自动删除。
+> 可以修改一个已存在的`pv`的`persistentVolumeReclaimPolicy`属性。
+
+## 动态设置persistentVolumes的获取

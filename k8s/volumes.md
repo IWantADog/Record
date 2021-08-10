@@ -81,3 +81,17 @@ cluster administrator通过`PersistentVolumes`定义可用资源。developer通�
 > 可以修改一个已存在的`pv`的`persistentVolumeReclaimPolicy`属性。
 
 ## 动态设置persistentVolumes的获取
+
+使用`StorageClass`自动分配`PersistentVolumes`。使用`SC`达到的效果是，当一个pod想用使用存储资源时，仅需声明一个`PVC`，并且指明该pvc使用的`SC`名字即可。其他一切底层的操作都由k8s来处理。
+> `StorageClass`属于k8s集成资源，并不属于某个namespace。
+
+使用`StorageClass`的好处是可以避免对单一云服务商提供的持久化过度耦合，导致pvc难以迁移。如果不使用`StorageClass`，而直接使用`PersistentVolumes`，管理员需要手动定义大量的pv配置。而如果使用`StorageClass`，管理员仅需定义若干几个`StorageClass`。当pod使用`pvc`是会自动分配合适的`pc`。
+
+> `StorageClass`的简写是`sc`。
+
+当`StorageClass`定义完成后，在pvc中可以直接通过`storage class name`使用声明的数据。
+
+存在一个默认的`sc`，一般命名为`standard`。当pvc没有指明从那个sc获取存储空间时，一般默认从standard分配。
+> kubectl get sc
+
+当出现想要为PVC手动绑定pv的时候，需要将PVC配置文件中的`storageClassName`设置为**空字符串**。如果不设置为空字符串，默认会使用SC分配pv。

@@ -94,6 +94,6 @@ def run():
 - stub需要一个channel初始化
     - stub与channel的抽象概念时什么意思（似乎stub底层通过channel发送数据）
 
-## scrpc
-- 仅使用的功能是使用`protocal buffer`对数据进行编码和解码。将数据编码之后通过post请求，将数据发送到server。
-- 仅提供了一个`endpoint`，服务端通过url中指定服务名和方法名，调用server中对应的方法。
+## Reference
+
+https://grpc.github.io/grpc/python/

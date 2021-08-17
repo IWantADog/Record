@@ -41,5 +41,41 @@ TODO: sotred的底层实现是什么样的？
 
 dict.key()和dict.values()返回的数据好像是一一对应的。(带测试)
 
+## 字典的`键视图`和`元素视图`
 
-https://python3-cookbook.readthedocs.io/zh_CN/latest/c01/p08_calculating_with_dict.html
+`dict.keys()` & `dict.items()`的返回结果支持集合操作，比如集合并、交、差运算。
+
+## 删除重复数据并保持数据的顺序
+
+```py
+def dedupe(items):
+    seen = set()
+    for item in items:
+        if item not in seen:
+            yield item
+            seen.add(item)
+```
+
+## 切片对象
+
+`slice()`。切片对象可以在任何使用切片的地方使用。
+
+## 计算序列中出现次数最多的元素
+
+`collections.Counter`
+
+## operator模块
+
+通过函数的调用，操作一些常用的运算符。
+
+## 对排序后的存在重复数据的序列进行分组
+
+`itertools.groupby()`
+
+## 过滤序列对象
+
+- filter: 需要注意的是返回的是一个迭代器，仅可迭代一次。
+- `itertool.compress()`:  它以一个 `iterable` 对象和一个相对应的 `Boolean` 选择器序列作为输入参数。 然后输出 `iterable` 对象中对应选择器为 `True` 的元素。
+	> 需要注意的是返回的结果也是一个迭代器。
+
+https://python3-cookbook.readthedocs.io/zh_CN/latest/c01/p17_extract_subset_of_dict.html

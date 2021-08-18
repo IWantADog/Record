@@ -1,6 +1,6 @@
 # reading process
 
-- [R] 1
+- [F] 1
 - [ ] 2
 - [ ] 3
 - [ ] section 6

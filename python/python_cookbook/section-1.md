@@ -78,4 +78,12 @@ def dedupe(items):
 - `itertool.compress()`:  它以一个 `iterable` 对象和一个相对应的 `Boolean` 选择器序列作为输入参数。 然后输出 `iterable` 对象中对应选择器为 `True` 的元素。
 	> 需要注意的是返回的结果也是一个迭代器。
 
-https://python3-cookbook.readthedocs.io/zh_CN/latest/c01/p17_extract_subset_of_dict.html
+## 关于聚合函数
+
+min、max、sum能够直接接受一个`生成器`，并且支持设置key进行排序。
+
+## 合并多个字典和映射
+
+存在多个字典，将多个字典合并。合并之后对原字典的修改依然会作用在合并后的字典上。
+
+**一个`ChainMap`接受多个字典并将他们在逻辑上变成一个字典。然而，这些字典并不是真正合并在了一起，`ChainMap`只是在内部创建了一个容纳这些字典的列表，并重新定义了一些常见的着字典操作来遍历这个列表。**

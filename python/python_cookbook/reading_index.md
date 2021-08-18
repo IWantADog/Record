@@ -2,8 +2,8 @@
 
 - [F] 1
 - [F] 2
-- [R] 3
-- [ ] section 6
+- [F] 3
+- [R] section 6
 - [ ] section 11
 - [ ] section 12
 

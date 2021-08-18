@@ -1,7 +1,7 @@
 # reading process
 
 - [F] 1
-- [ ] 2
+- [R] 2
 - [ ] 3
 - [ ] section 6
 - [ ] section 11

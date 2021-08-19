@@ -6,7 +6,7 @@
 - [S] section 6
 - [F] section 11
 	> 未全部读完，有3章节完全看不懂。
-- [ ] section 12
+- [R] section 12
 
 ## legend
 

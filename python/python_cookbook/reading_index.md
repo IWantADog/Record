@@ -3,7 +3,7 @@
 - [F] 1
 - [F] 2
 - [F] 3
-- [R] section 6
+- [S] section 6
 - [ ] section 11
 - [ ] section 12
 

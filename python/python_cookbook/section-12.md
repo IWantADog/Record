@@ -85,4 +85,141 @@ def acquire(*locks):
         del acquired[-len(locks):]
 ```
 
-https://python3-cookbook.readthedocs.io/zh_CN/latest/c12/p06_storing_thread_specific_state.html
+## threading.local
+
+保存线程的信息
+
+## 简单的线程池
+
+`from concurrent.futures import ThreadPoolExecutor`
+
+## python的全局锁问题
+
+- 讨论python的性能，一定要区分是`i/o密集型任务`和`cpu密集型任务`。
+- 尝试其他的解释器实现`PyPy`
+
+## Actor模式
+
+将函数的执行委托给一个线程，通过一个任务队列来维持任务。通过定义一个异常来终止任务。
+
+`Actor`的处理是单向和异步的:
+- 发送者不知道任务什么时候执行
+- 发送者也无法接受到任务的返回值
+
+```py
+from queue import Queue
+from threading import Thread, Event
+
+# Sentinel used for shutdown
+class ActorExit(Exception):
+    pass
+
+class Actor:
+    def __init__(self):
+        self._mailbox = Queue()
+
+    def send(self, msg):
+        '''
+        Send a message to the actor
+        '''
+        self._mailbox.put(msg)
+
+    def recv(self):
+        '''
+        Receive an incoming message
+        '''
+        msg = self._mailbox.get()
+        if msg is ActorExit:
+            raise ActorExit()
+        return msg
+
+    def close(self):
+        '''
+        Close the actor, thus shutting it down
+        '''
+        self.send(ActorExit)
+
+    def start(self):
+        '''
+        Start concurrent execution
+        '''
+        self._terminated = Event()
+        t = Thread(target=self._bootstrap)
+
+        t.daemon = True
+        t.start()
+
+    def _bootstrap(self):
+        try:
+            self.run()
+        except ActorExit:
+            pass
+        finally:
+            self._terminated.set()
+
+    def join(self):
+        self._terminated.wait()
+
+    def run(self):
+        '''
+        Run method to be implemented by the user
+        '''
+        while True:
+            msg = self.recv()
+
+# Sample ActorTask
+class PrintActor(Actor):
+    def run(self):
+        while True:
+            msg = self.recv()
+            print('Got:', msg)
+
+# Sample use
+p = PrintActor()
+p.start()
+p.send('Hello')
+p.send('World')
+p.close()
+p.join()
+```
+
+更有趣的一个例子:
+- 可以获取返回值（获取返回值的时候会阻塞线程）
+
+```py
+from threading import Event
+class Result:
+    def __init__(self):
+        self._evt = Event()
+        self._result = None
+
+    def set_result(self, value):
+        self._result = value
+
+        self._evt.set()
+
+    def result(self):
+        self._evt.wait()
+        return self._result
+
+class Worker(Actor):
+    def submit(self, func, *args, **kwargs):
+        r = Result()
+        self.send((func, args, kwargs, r))
+        return r
+
+    def run(self):
+        while True:
+            func, args, kwargs, r = self.recv()
+            r.set_result(func(*args, **kwargs))
+
+# Example use
+worker = Worker()
+worker.start()
+r = worker.submit(pow, 2, 3)
+worker.close()
+worker.join()
+print(r.result())
+```
+
+https://python3-cookbook.readthedocs.io/zh_CN/latest/c12/p11_implement_publish_subscribe_messaging.html

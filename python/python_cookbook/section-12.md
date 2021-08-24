@@ -222,4 +222,54 @@ worker.join()
 print(r.result())
 ```
 
-https://python3-cookbook.readthedocs.io/zh_CN/latest/c12/p11_implement_publish_subscribe_messaging.html
+## 消息发布和订阅模型
+
+```py
+from contextlib import contextmanager
+from collections import defaultdict
+
+class Exchange:
+    def __init__(self):
+        self._subscribers = set()
+
+    def attach(self, task):
+        self._subscribers.add(task)
+
+    def detach(self, task):
+        self._subscribers.remove(task)
+
+    @contextmanager
+    def subscribe(self, *tasks):
+        for task in tasks:
+            self.attach(task)
+        try:
+            yield
+        finally:
+            for task in tasks:
+                self.detach(task)
+
+    def send(self, msg):
+        for subscriber in self._subscribers:
+            subscriber.send(msg)
+
+# Dictionary of all created exchanges
+_exchanges = defaultdict(Exchange)
+
+# Return the Exchange instance associated with a given name
+def get_exchange(name):
+    return _exchanges[name]
+
+# Example of using the subscribe() method
+exc = get_exchange('name')
+with exc.subscribe(task_a, task_b):
+     ...
+     exc.send('msg1')
+     exc.send('msg2')
+     ...
+
+# task_a and task_b detached here
+```
+
+## 使用协程代替线程
+
+https://python3-cookbook.readthedocs.io/zh_CN/latest/c12/p13_polling_multiple_thread_queues.html

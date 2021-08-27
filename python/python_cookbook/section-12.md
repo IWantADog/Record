@@ -272,4 +272,52 @@ with exc.subscribe(task_a, task_b):
 
 ## 使用协程代替线程
 
-https://python3-cookbook.readthedocs.io/zh_CN/latest/c12/p13_polling_multiple_thread_queues.html
+使用协程相当于每个线程独自维护了一个事件调度进程，对事件进行调度。而使用多线程则是由操作系统来处理不同事件之间的调度。
+
+一个简单的任务调度器
+
+```py
+from collections import deque
+
+class TaskScheduler:
+    def __init__(self):
+        self._task_queue = deque()
+
+    def new_task(self, task):
+        '''
+        Admit a newly started task to the scheduler
+        '''
+        self._task_queue.append(task)
+
+    def run(self):
+        '''
+        Run until there are no more tasks
+        '''
+        while self._task_queue:
+            task = self._task_queue.popleft()
+            try:
+                # Run until the next yield statement
+                next(task)
+                self._task_queue.append(task)
+            except StopIteration:
+                # Generator is no longer executing
+                pass
+
+# Example use
+sched = TaskScheduler()
+sched.new_task(countdown(10))
+sched.new_task(countdown(5))
+sched.new_task(countup(15))
+sched.run()
+```
+
+## 多线程队列轮训
+
+TODO: 看不懂，留到以后吧
+
+## 在Unix系统上面启动守护进程
+
+- os.fork
+- os.kill
+- unix系统上的pidfile的用途
+    - 存储进程的ID

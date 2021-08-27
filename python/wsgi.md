@@ -40,3 +40,15 @@ http://ivory.idyll.org/articles/wsgi-intro/what-is-wsgi.html
 [Werkzeug](https://werkzeug.palletsprojects.com/en/1.0.x/)
 
 Werkzeug不是一个框架。它是一个工具库，用途是帮助python web框架或web applicaiton作者实现wsgi。
+
+## what middleware can do
+
+- Handle web application errors
+- Provide session support
+- Profile your web application
+- Deal with Login authentication
+- and Gzip the output
+
+## Reference
+
+https://lucumr.pocoo.org/2007/5/21/getting-started-with-wsgi/

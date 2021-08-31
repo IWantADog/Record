@@ -44,4 +44,6 @@ Don't forget to clean up when 'close()' is called.
 
 ## pep
 
-### pep 255
+### pep 255 -- simple generators
+
+That exhausts the current alternatives. Some other high-level languages provide pleasant solutions, notably iterators in Sather [4], which were inspired by iterators in CLU; and generators in Icon [5], a novel language where every expression is a generator. There are differences among these, but the basic idea is the same: provide a kind of function that can return an intermediate result ("the next value") to its caller, but maintaining the function's local state so that the function can be resumed again right where it left off. A very simple example:

@@ -45,5 +45,9 @@ Don't forget to clean up when 'close()' is called.
 ## pep
 
 ### pep 255 -- simple generators
+- yield不能在try/excep中（待确认，感觉有点问题）
 
-That exhausts the current alternatives. Some other high-level languages provide pleasant solutions, notably iterators in Sather [4], which were inspired by iterators in CLU; and generators in Icon [5], a novel language where every expression is a generator. There are differences among these, but the basic idea is the same: provide a kind of function that can return an intermediate result ("the next value") to its caller, but maintaining the function's local state so that the function can be resumed again right where it left off. A very simple example:
+### pep 342 -- Coroutines via Enhanced Generators
+
+Also, generators cannot yield control while other functions are executing, unless those functions are themselves expressed as generators, and the outer generator is written to yield in response to values yielded by the inner generator. This complicates the implementation of even relatively simple use cases like asynchronous communications, because calling any functions either requires the generator to block (i.e. be unable to yield control), or else a lot of boilerplate looping code must be added around every needed function call.
+

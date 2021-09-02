@@ -48,6 +48,7 @@ Don't forget to clean up when 'close()' is called.
 - yield不能在try/excep中(**不过在之后的pep中修改了这个特性**)
 
 ### pep 342 -- Coroutines via Enhanced Generators
+- 在这个pep中增加了`yield`可以写在`try-finally`中的功能
 - 生成器的本质是当调用一个函数时并不立即执行该方法，而是用返回一个对象来代替对函数返回的结果。
 - 得到返回的生成器对象之后，用户需要在该对象上调用方法来驱动函数一步步执行。
     - 通常对生成器对象使用的`for`和`next`方法，其实都调用的是生成器的`__next__`方法。
@@ -55,7 +56,6 @@ Don't forget to clean up when 'close()' is called.
     - `throw`是向生成器对象中传递一个异常。实现一个生成器函数时，可以对不同的异常做相应的处理逻辑。如果捕获异常之后重新`yield`新值，则新值会作为`throw`的返回值。
     - `close`是关闭一个生成器，`close`之后的`__next__`调用都会报`StopIteration`。可以在生成器内部执行资源回收的操作。
 - `yield`是一个`expression`，返回值为`None`，除非通过`send`发送一个`非None值`。
-- 在这个pep中增加了`yield`可以写在`try-finally`中的功能
 
 ```py
 def test(_t=None):
@@ -67,9 +67,6 @@ def test(_t=None):
         finally:
             print("in finally")
 ```
-
-Note that it is unlikely to see a generator object participate in a cycle in practice. However, storing a generator object in a global variable creates a cycle via the generator frame's f_globals pointer. Another way to create a cycle would be to store a reference to the generator object in a data structure that is passed to the generator as an argument (e.g., if an object has a method that's a generator, and keeps a reference to a running iterator created by that method). Neither of these cases are very likely given the typical patterns of generator use.
-
 
 #### tips
 

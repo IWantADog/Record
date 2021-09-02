@@ -45,9 +45,33 @@ Don't forget to clean up when 'close()' is called.
 ## pep
 
 ### pep 255 -- simple generators
-- yield不能在try/excep中（待确认，感觉有点问题）
+- yield不能在try/excep中(**不过在之后的pep中修改了这个特性**)
 
 ### pep 342 -- Coroutines via Enhanced Generators
+- 生成器的本质是当调用一个函数时并不立即执行该方法，而是用返回一个对象来代替对函数返回的结果。
+- 得到返回的生成器对象之后，用户需要在该对象上调用方法来驱动函数一步步执行。
+    - 通常对生成器对象使用的`for`和`next`方法，其实都调用的是生成器的`__next__`方法。
+    - `send`可以向生成器传递数据，不过只能传递一个参数。
+    - `throw`是向生成器对象中传递一个异常。实现一个生成器函数时，可以对不同的异常做相应的处理逻辑。如果捕获异常之后重新`yield`新值，则新值会作为`throw`的返回值。
+    - `close`是关闭一个生成器，`close`之后的`__next__`调用都会报`StopIteration`。可以在生成器内部执行资源回收的操作。
+- `yield`是一个`expression`，返回值为`None`，除非通过`send`发送一个`非None值`。
+- 在这个pep中增加了`yield`可以写在`try-finally`中的功能
 
-Also, generators cannot yield control while other functions are executing, unless those functions are themselves expressed as generators, and the outer generator is written to yield in response to values yielded by the inner generator. This complicates the implementation of even relatively simple use cases like asynchronous communications, because calling any functions either requires the generator to block (i.e. be unable to yield control), or else a lot of boilerplate looping code must be added around every needed function call.
+```py
+def test(_t=None):
+    while True:
+        try:
+            _t = (yield _t)
+        except Exception as e:
+            print("catch exception: " + str(e))
+        finally:
+            print("in finally")
+```
+
+Note that it is unlikely to see a generator object participate in a cycle in practice. However, storing a generator object in a global variable creates a cycle via the generator frame's f_globals pointer. Another way to create a cycle would be to store a reference to the generator object in a data structure that is passed to the generator as an argument (e.g., if an object has a method that's a generator, and keeps a reference to a running iterator created by that method). Neither of these cases are very likely given the typical patterns of generator use.
+
+
+#### tips
+
+关于`statement`&`expression`。可以简单理解为能放在`=`右边的是`expression`，反之则是`statement`。
 

@@ -74,5 +74,16 @@ def test(_t=None):
 
 ### pep 380 -- Syntax for Delegating to a Subgenerator
 
-A syntax is proposed for a generator to delegate part of its operations to another generator. This allows a section of code containing 'yield' to be factored out and placed in another generator. Additionally, the subgenerator is allowed to return with a value, and the value is made available to the delegating generator.
+- 在一个生成器中将部分功能委托给另一个子生成器。并且子生成器的返回值可以被父生成器使用。
+- `yield from <expr>`的功能其实类似于`for i in g: yield i`。不过额外封装了`send`, `throw`, `close`的功能。
+- 子生成器中`return`返回的数据会作为`yield from <expre>`最后的返回值
 
+TODO: 大部分看不懂 
+
+#### reference
+
+[In practice, what are the main uses for the new "yield from" syntax in Python 3.3?](https://stackoverflow.com/questions/9708902/in-practice-what-are-the-main-uses-for-the-new-yield-from-syntax-in-python-3)
+
+### PEP 525 - Asynchronous Generators
+
+TODO: 异步还不是很懂，先放着吧。

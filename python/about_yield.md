@@ -91,4 +91,5 @@ TODO: 异步还不是很懂，先放着吧。
 
 ## reference
 
+TODO: read again
 [generators](http://www.dabeaz.com/generators/index.html)

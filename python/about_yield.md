@@ -87,3 +87,8 @@ TODO: 大部分看不懂
 ### PEP 525 - Asynchronous Generators
 
 TODO: 异步还不是很懂，先放着吧。
+
+
+## reference
+
+[generators](http://www.dabeaz.com/generators/index.html)

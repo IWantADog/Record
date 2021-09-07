@@ -101,3 +101,6 @@ TODO: read again
     - `coroutines`和迭代器没有关系
 
     TODO: start from page 27
+
+
+### [Generators: The Final Frontier](http://www.dabeaz.com/finalgenerator/)

@@ -29,8 +29,6 @@
 
     删除所有的旧版本pod，之后创建新pod。
 
-### about `minReadySeconds`
-
 ### about modify resources
 
 - `kubectl edit`: 使用默认的编辑器打开manifest，保存后生效。

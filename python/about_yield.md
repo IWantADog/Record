@@ -93,3 +93,11 @@ TODO: 异步还不是很懂，先放着吧。
 
 TODO: read again
 [generators](http://www.dabeaz.com/generators/index.html)
+
+### [coroutines](http://www.dabeaz.com/coroutines/Coroutines.pdf)
+- 区分清楚`generators`和`coroutines`的差异
+    - `generators`用来产生数据
+    - `coroutines`用来消费数据
+    - `coroutines`和迭代器没有关系
+
+    TODO: start from page 27

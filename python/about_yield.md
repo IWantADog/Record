@@ -100,7 +100,8 @@ TODO: read again
     - `coroutines`用来消费数据
     - `coroutines`和迭代器没有关系
 
-    TODO: start from page 27
-
+coroutines相关的东西没细读（感觉日常开发根本用不到）
 
 ### [Generators: The Final Frontier](http://www.dabeaz.com/finalgenerator/)
+
+start from page 119(后面的根本没仔细看了)

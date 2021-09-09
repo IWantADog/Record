@@ -104,4 +104,5 @@ coroutines相关的东西没细读（感觉日常开发根本用不到）
 
 ### [Generators: The Final Frontier](http://www.dabeaz.com/finalgenerator/)
 
-start from page 119(后面的根本没仔细看了)
+- 可以在项目代码中使用`yield`生成器
+- 至于其他的`thread`、`recursion`、`send`、`close`、`throw`最好不要在实际项目中使用（极其难以理解，会让review的人头脑爆炸）。

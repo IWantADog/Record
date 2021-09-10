@@ -24,12 +24,18 @@
 		- `__self__`存储`class instance`。对于`class methods`，`__self__`存储的是`class`。
 		- `__func__`存储实际的`function`
 	- 理解`A.func(a)`等价与`a.func()`。
+- classes instance
+	- 类属性存储在`__dict__`中。在当前类找不到相应的属性时会向父类寻找。
+	- 实例属性的搜索路径
+		1. instance的`__dict__`
+		2. class的`__dict__`
+			- 如果搜索的属性是`user-defined function`，则返回一个`instance methods`
+			- `static method`和`class method`会通过`Descriptors`实现
+		3. class的`__getattr__`
+	- 对实例属性的修改仅会修改实例的`__dict__`，不会修改类的`__dict__`。如果类中定义了`__setattr`和`__delattr__`，当修改属性是会先调用这两个方法。
 
-
-Modules are a basic organizational unit of Python code, and are created by the import system as invoked either by the import statement, or by calling functions such as importlib.import_module() and built-in __import__(). A module object has a namespace implemented by a dictionary object (this is the dictionary referenced by the __globals__ attribute of functions defined in the module). Attribute references are translated to lookups in this dictionary, e.g., m.x is equivalent to m.__dict__["x"]. A module object does not contain the code object used to initialize the module (since it isn’t needed once the initialization is done).
-
-
-
+Internal types
+A few types used internally by the interpreter are exposed to the user. Their definitions may change with future versions of the interpreter, but they are mentioned here for completeness.
 
 ## __new__ and __init__
 

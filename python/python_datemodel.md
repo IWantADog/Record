@@ -2,6 +2,35 @@
 
 [offical document](https://docs.python.org/3/reference/datamodel.html)
 
+## Objects, values and types
+- 每个对象都有`identity`、`type`、`value`。一个对象被创建之后`identity`不会被改变，可以认为`identity`是对象在内存中的位置。
+- 当使用`is`时比较的就是两个对象的`identity`。可以使用`id()`获取一个对象的`identity`。
+- 对于`immutable`如果`value`相同则可能是同一对象。而对于`mutable`即使`value`相同也不可能是同一对象。
+
+## The standard type hierarchy
+
+- `function`和`instance methods`都是可调用对象。
+- 区分清楚`function`和`instance methods`
+
+	```py
+	class A:
+		def func(self):
+			pass
+
+	a = A()
+	```
+	- 区分清楚`A.func`和`a.func`。`A.func`是一个`function`，`a.func`是一个`methods`
+	- `methods`中包含了`class`、`class instance`和一个`callable object`(通常是一个user-defined function)。
+		- `__self__`存储`class instance`。对于`class methods`，`__self__`存储的是`class`。
+		- `__func__`存储实际的`function`
+	- 理解`A.func(a)`等价与`a.func()`。
+
+
+Modules are a basic organizational unit of Python code, and are created by the import system as invoked either by the import statement, or by calling functions such as importlib.import_module() and built-in __import__(). A module object has a namespace implemented by a dictionary object (this is the dictionary referenced by the __globals__ attribute of functions defined in the module). Attribute references are translated to lookups in this dictionary, e.g., m.x is equivalent to m.__dict__["x"]. A module object does not contain the code object used to initialize the module (since it isn’t needed once the initialization is done).
+
+
+
+
 ## __new__ and __init__
 
 > `__new__()` to create it, and `__init__()` to customize it.

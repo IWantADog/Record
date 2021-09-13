@@ -34,18 +34,16 @@
 		3. class的`__getattr__`
 	- 对实例属性的修改仅会修改实例的`__dict__`，不会修改类的`__dict__`。如果类中定义了`__setattr`和`__delattr__`，当修改属性是会先调用这两个方法。
 
-Internal types
-A few types used internally by the interpreter are exposed to the user. Their definitions may change with future versions of the interpreter, but they are mentioned here for completeness.
+## Special method names
 
-## __new__ and __init__
-
-> `__new__()` to create it, and `__init__()` to customize it.
-
+### __new__ and __init__
+- `__new__`创建对象，`__init__`初始化对象
+- `__new__`返回一个对象，`__init__`不需要显示返回值（返回空值）
 > So in our example, `x.f` is a valid method reference, since `MyClass.f` is a function, but `x.i` is not, since `MyClass.i` is not. But `x.f` is not the same thing as `MyClass.f` — it is a `method object`, not a `function object`.
 
 > the special thing about methods is that the instance object is passed as the first argument of the function. In our example, the call `x.f()` is exactly equivalent to `MyClass.f(x)`. In general, calling a method with a list of n arguments is equivalent to calling the corresponding function with an argument list that is created by inserting the method’s instance object before the first argument.
 
-[进度](https://docs.python.org/3/reference/datamodel.html#customizing-attribute-access)
+object.__hash__(self)
 
 ## __slots__
 TODO: 记录一下

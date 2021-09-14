@@ -89,8 +89,6 @@ class Base:
 `__slots__`的主要用途是`节省内存（当某个类的实例数量十分庞大时）`和`加速属性获取`。
 
 
-
-
 ## Customizing class creation
 
 ### object.__init_subclass__(cls)
@@ -114,8 +112,7 @@ class MyClass(metaclass=Meta, first=1, second="this is second")
 
 当使用`metaclass`时，所有其他的传入的`kwargs`参数会被直接向下传递。
 
-When a class definition is executed, the following steps occur:
-
+当`class`定义被执行时，以下步骤依次执行:
 - MRO entries are resolved;(确定MRO)
 - the appropriate metaclass is determined;(确定合适的`metaclass`)
 - the class namespace is prepared;(TODO: class namespace是什么东西)
@@ -132,7 +129,6 @@ TODO: 什么意思
 - 如果显式指定`metaclass`当它不是一个`type()`的`instance`，则直接将其作为`metaclass`。
 - 如果一个`type()`的`instance`被显式指定为`metaclass`，或者基类被指定，则使用最近的`metaclass`。
 
-TODO: `type instance`具体指什么？指的是class吗？
 
 ## about type
 

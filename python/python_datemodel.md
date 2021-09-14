@@ -39,6 +39,18 @@
 ### basic customization
 - `__new__`创建对象，`__init__`初始化对象
 - `__new__`返回一个对象，`__init__`不需要显示返回值（返回空值）
+- 当在一个类上定义了`__new__`后，如果调用`super().__new__(cls)`，不会向上搜索调用`type().__new__()`。
+
+	```py
+	class A:
+		def __new__(cls):
+			return super).__new__(cls)
+	```
+
+	需要注意：
+	- A.__new__用来创建类A的实例
+	- type.__new__用来创建A的实例
+
 - 使用`__hash__`时，可以采用将对象的不同属性组合成一个`tuple`之后使用`hash()`处理。
 
 ### customizing attribute access
@@ -143,5 +155,6 @@ TODO: 什么意思
 ## reference
 
 https://blog.ionelmc.ro/2015/02/09/understanding-python-metaclasses/
+> this is very important
 
 https://docs.python.org/3/reference/datamodel.html#customizing-class-creation

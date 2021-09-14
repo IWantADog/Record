@@ -83,11 +83,13 @@ class Base:
 - `not-data descriptor`: 仅定义`__get__`。
 - `staticmethod`和`classmethod`都是`not-data descriptor`。`property`是一个`data descriptor`。
 
-hi hi. start from here
-3.3.2.4. __slots__
+#### \_\_slots__
+`__slots__`能够显式地决定那些属性可以被创建，并且可以阻止`__dict__`和`__weakref__`被创建（除非通过`__slots__`显式的声明）
 
-## __slots__
-TODO: 记录一下
+`__slots__`的主要用途是`节省内存（当某个类的实例数量十分庞大时）`和`加速属性获取`。
+
+
+
 
 ## Customizing class creation
 

@@ -36,14 +36,55 @@
 
 ## Special method names
 
-### __new__ and __init__
+### basic customization
 - `__new__`创建对象，`__init__`初始化对象
 - `__new__`返回一个对象，`__init__`不需要显示返回值（返回空值）
-> So in our example, `x.f` is a valid method reference, since `MyClass.f` is a function, but `x.i` is not, since `MyClass.i` is not. But `x.f` is not the same thing as `MyClass.f` — it is a `method object`, not a `function object`.
+- 使用`__hash__`时，可以采用将对象的不同属性组合成一个`tuple`之后使用`hash()`处理。
 
-> the special thing about methods is that the instance object is passed as the first argument of the function. In our example, the call `x.f()` is exactly equivalent to `MyClass.f(x)`. In general, calling a method with a list of n arguments is equivalent to calling the corresponding function with an argument list that is created by inserting the method’s instance object before the first argument.
+### customizing attribute access
 
-object.__hash__(self)
+- `__getattribute__`: 获取属性的默认方式。使用`__getattribute__`可以完全控制对象属性的获取
+- `__getattr__`: 如果通过`__getattribute__`无法获取属性，则会调用`__getattr__`
+- `__setattr__`: 设置属性时触发
+- `__delattr__`: 删除属性时出发
+
+#### Implementing Descriptors
+
+- `__get__`
+- `__set__`
+- `__delete__`
+- `__set_name__`
+
+#### Invoking Descriptors
+
+```py
+class Descriptor:
+    def __init__(self, name):
+        self._name = name
+    def __get__(self, instance, owner_class):
+        if instance:
+            return instance.__dict__.get(self._name, "is empty")
+        raise ValueError("you need a instance")
+    def __set__(self, instance, value):
+        if not instance:
+            raise ValueError("you need a instance")
+        print(f"set new value {value}")
+        instance.__dict__[self._name] = value
+
+class Base:
+    c1 = Descriptor("c1")
+```
+
+- 直接调用: `x.__get__(a)`
+- 通过instance调用: `x.a`相当于`type(x).__dict__["a"].__get__(x, type(x))`
+- 通过class调用: `X.a`相当于`X.__dict__["a"].__get__(None, x)`
+- 通过super调用: 假设`super()`的返回值为`X`，则实际的调用相当于`X.__dict__["a"].__get__(x, x.__class__)`
+- `data descriptor`: 定义`__set__`或`__delete__`中的一个，或全部。
+- `not-data descriptor`: 仅定义`__get__`。
+- `staticmethod`和`classmethod`都是`not-data descriptor`。`property`是一个`data descriptor`。
+
+hi hi. start from here
+3.3.2.4. __slots__
 
 ## __slots__
 TODO: 记录一下

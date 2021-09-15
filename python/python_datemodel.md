@@ -2,6 +2,8 @@
 
 [offical document](https://docs.python.org/3/reference/datamodel.html)
 
+TODO: 感觉需要再读几遍
+
 ## Objects, values and types
 - 每个对象都有`identity`、`type`、`value`。一个对象被创建之后`identity`不会被改变，可以认为`identity`是对象在内存中的位置。
 - 当使用`is`时比较的就是两个对象的`identity`。可以使用`id()`获取一个对象的`identity`。

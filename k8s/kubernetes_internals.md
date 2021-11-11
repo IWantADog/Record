@@ -58,3 +58,14 @@ add-on components
     1. 注册`kubectl`运行的node到`api server`。
     2. 从`api server`订阅分配到该node上pod的信息，当pod状态改变通知`container runtime`。
     3. 持续关注运行在该node上的容器，将其状态发送给`api server`。
+    4. 运行`liveness prode`。
+    5. 重启和删除`container`。
+- 关于`kubernetes service proxy`的相关概念
+  - `kube-proxy`运行在`worker`上
+  - `kube-proxy`负责将访问`service`的请求负载均衡到连接在`service`后的`pod`上。
+    - 内部通过`iptables`实现
+- 关于add-ons
+  - 关于`DNS server`
+    - `DNS server`主要用于方便`pod`通过name连接到`service`或是连接到`headlesss service`的pod。
+    - 默认名字为`kube-dns`
+    - 实现原理：通过`api server`订阅功能，订阅`service`和`endpoint`的变化。一旦发生变化，更新集群内部所有`container`的`/etc/resolv.conf`文件。

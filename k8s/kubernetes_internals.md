@@ -69,3 +69,29 @@ add-on components
     - `DNS server`主要用于方便`pod`通过name连接到`service`或是连接到`headlesss service`的pod。
     - 默认名字为`kube-dns`
     - 实现原理：通过`api server`订阅功能，订阅`service`和`endpoint`的变化。一旦发生变化，更新集群内部所有`container`的`/etc/resolv.conf`文件。
+
+## How services are implemented
+
+- about kube-proxy
+  - 所有到service的连接都由该`node`上的`kube-proxy`进行处理。
+  - `service`的ip和port成对出现，仅单独使用ip没有意义。
+  - `kube-proxy`如何使用`iptables`
+    1. 当一个`service`被创建，会立即被分配一个`virtual IP`。
+    2. `api server`立即通知所有的node上的`kube-proxy`，新的`service`被创建了。
+    3. `kube-proxy`确保其运行的`node`对`新service`是可达的。实际的做法是新增若干条`iptables`记录，将指向`service`的请求，重定向到其关联的任意一个`pod`上。
+    4. `kube-proxy`不仅需要时刻监控`service`的状态，还要时刻监控`Endpoints`的状态。
+
+## Running highly available clusters
+
+- making app highly available
+  - 同时运行多个实例，降低宕机的可能性
+  - 对无法同时部署多个实例的`app`使用[leader-election](https://en.wikipedia.org/wiki/Leader_election)
+
+- making kubenetes control plane highly available
+  - 同时运行多个`master node`
+  - 运行一个`ectd`集群
+    -
+
+
+
+

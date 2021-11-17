@@ -50,7 +50,7 @@ add-on components
   - 控制实际的组件达到制定的状态（例如，控制pod达到制定的数量）。
     1. 通过`api server`的订阅机制获取资源实际状态。
     2. 对比`实际状态`和`指定状态`即配置文件中指定的状态。
-    3. 向`api server`发送请求，更像资源的状态。
+    3. 向`api server`发送请求，更新资源的状态。
   - 不同的controller之间不相互通讯，甚至不知道之间的存在。
 - 关于`kubectl`的相关概念
   - `kubectl`运行在`work node`上。(其他的组件都运行在`master node`上)
@@ -89,9 +89,14 @@ add-on components
 
 - making kubenetes control plane highly available
   - 同时运行多个`master node`
-  - 运行一个`ectd`集群
-    -
+  - 同时运行多个`ectd`实例
+  - 同时运行多个`api server`实例，每个`api server`仅与相同node上的`ectd`通信
+  - `controllers`和`scheduler`的高可用
+    
+    由于`controllers`和`scheduler`会对各种资源做操作，可能存在竞争关系。
 
+    可以同时存在多个`controllers`和`scheduler`实例，但在任何给定时刻仅能有一个处于活跃状态。详细概念为`leader-election`。当`leader`不可访问时，再从非活跃的实例中，选举一个`新leader`。当`leader`活跃时，其他实例处于`stand-by`状态
 
+## pod内部的网络情况
 
-
+TODO: 还是加上吧

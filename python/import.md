@@ -10,8 +10,10 @@ When a regular package is imported, this __init__.py file is implicitly executed
 
 导入一个模块时，python寻找的地方
 1. sys.module
-2. python standard liberity
+2. python standard library
+  - python官方提供的模块
 3. sys.path
+  - 安装的依赖和本地的项目等
   - 通过`PYTHONPATH`可修改
 
 ## reference
@@ -20,7 +22,7 @@ When a regular package is imported, this __init__.py file is implicitly executed
 
 [PEP 302](https://www.python.org/dev/peps/pep-0302/)
 
-[PEP 366](https://www.python.org/dev/peps/pep-0366/)s
+[PEP 366](https://www.python.org/dev/peps/pep-0366/)
 
 [PEP 328](https://www.python.org/dev/peps/pep-0328/)
 

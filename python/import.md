@@ -6,6 +6,14 @@ It’s important to keep in mind that all packages are modules, but not all modu
 
 When a regular package is imported, this __init__.py file is implicitly executed, and the objects it defines are bound to names in the package’s namespace. The __init__.py file can contain the same Python code that any other module can contain, and Python will add some additional attributes to the module when it is imported.
 
+## 结论
+
+导入一个模块时，python寻找的地方
+1. sys.module
+2. python standard liberity
+3. sys.path
+  - 通过`PYTHONPATH`可修改
+
 ## reference
 
 [python import](https://docs.python.org/3.7/reference/import.htmls)

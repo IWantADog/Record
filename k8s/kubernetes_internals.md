@@ -97,6 +97,11 @@ add-on components
 
     可以同时存在多个`controllers`和`scheduler`实例，但在任何给定时刻仅能有一个处于活跃状态。详细概念为`leader-election`。当`leader`不可访问时，再从非活跃的实例中，选举一个`新leader`。当`leader`活跃时，其他实例处于`stand-by`状态
 
-## pod内部的网络情况
-
-TODO: 还是加上吧
+## inter-pod networking
+- pod之间通信时，必须使用实际pod的ip地址。不能使用`NAT(network address translation)`。
+- 同一node上的pod，使用`虚拟网管接口（virtual Ethernet interface）`连接到同一个`bridge`上进行通讯。
+- 集群内部所有pod的ip必须唯一。
+  - 每个node上`bridges`（ip范围）必须不重叠。
+- 不同`node`上的`pod`之间的通讯
+  pod -> veth -> bridge -> phycial adapter -> brider -> veth -> pod
+- Software Defined Network(SDN)

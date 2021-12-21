@@ -62,6 +62,9 @@ class T1:
 
 - `function`是一个`descripter`
 - 每次通过`.`访问一个`function`，会触发`function.__get__`并则返回一个`method`，并将实例化的对象作为`function`的第一个参数返回。
+- `method`中保存了`obj`和`function`
+  - `__func__`保存`function`对象
+  - `__self__`保存实例化对象
 
 ```py
 # 从官网上复制的例子，使用纯python实现的method和function。

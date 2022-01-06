@@ -16,3 +16,13 @@
   - 主要目的：通过对比 `A/B变量` 相应的统计数据，从`A/B`中找出最优解。
   - 确保单一变量
   - 应用的范畴更广
+
+## reference
+
+https://blog.container-solutions.com/kubernetes-deployment-strategies
+
+https://en.wikipedia.org/wiki/Blue-green_deployment
+
+https://en.wikipedia.org/wiki/Feature_toggle
+
+https://en.wikipedia.org/wiki/A/B_testing

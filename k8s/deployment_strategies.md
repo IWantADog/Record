@@ -21,6 +21,8 @@
 
 ## reference
 
+https://github.com/ContainerSolutions/k8s-deployment-strategies
+
 https://blog.container-solutions.com/kubernetes-deployment-strategies
 
 https://en.wikipedia.org/wiki/Blue-green_deployment

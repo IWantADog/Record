@@ -105,12 +105,14 @@ k8s探测容器内部状态的几种原理:
 - failure: 设置失败可以接受的次数。只有失败的次数超过设置的值后才会重启`pod`。
 
 ### liveness、readiness、startup probes
+liveness probes: 决定何时重启container
+  - 适用于重启容器可以解决问题的场景。如果重启容器无法解决问题，只会导致容器频繁被启动。
 
-- liveness probes: 决定何时重启container
-- readiness probes: 决定何时一个容器开始接受流量
-- startup probes: 确定何时一个application已启动
-    - 适用于需要较长时间启动的应用。
-    - 直到`startup probes`成功之后，才校验`liveness probes`&`readiness probes`
+readiness probes: 决定何时一个容器开始接受流量
+
+startup probes: 确定何时一个application已启动
+  - 适用于需要较长时间启动的应用。
+  - 直到`startup probes`成功之后，才校验`liveness probes`&`readiness probes`
 
 ### exit code
 - 137: 128 + 9(SIGKILL)

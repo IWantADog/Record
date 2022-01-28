@@ -41,12 +41,13 @@ TODO: 感觉需要再读几遍
 ### basic customization
 - `__new__`创建对象，`__init__`初始化对象
 - `__new__`返回一个对象，`__init__`不需要显示返回值（返回空值）
+- `__new__`是一个特殊的`static method`，不需要`classmethod/staticmethod`装饰器，默认将类对象作为第一个形参。
 - 当在一个类上定义了`__new__`后，如果调用`super().__new__(cls)`，不会向上搜索调用`type().__new__()`。
 
 	```py
 	class A:
 		def __new__(cls):
-			return super).__new__(cls)
+			return super().__new__(cls)
 	```
 
 	需要注意：
@@ -107,7 +108,7 @@ class Base:
 
 ### object.__init_subclass__(cls)
 
-1. 当存在`__init__subclass__`方法的`class`被继承是，`__init__subclass__`就会被调用。
+1. 当存在`__init__subclass__`方法的`class`被继承时，`__init__subclass__`就会被调用。
 2. 传入的`cls`是新定义的子类。
 3. 需要是`classmethod`。如果定义时没有显式指定为`classmethod`，会将其隐式的转换为`classmethod`。
 4. 默认的`object.__init_subclass__`什么都不做。但如果传入了若干参数并被调用会抛出异常。
@@ -153,6 +154,64 @@ TODO: 什么意思
 - `bases`作为`__bases__`。如果bases为空tuple，则`object`被加入。
 - `dict`作为`__dict__`。
 - `kwds`
+- 如何手动实例化一个class?
+	```
+	manual_class = type("ManualClass", base=(), classdict={})
+	```
+
+
+## __new__ & __init__ & __call__ & __prepare__
+
+### __prepare__
+
+- 在`__new__`调用之前被调用，返回一个`dict`对象，用于存储class的信息（类方法、类变量等）。
+	- **注意** `__prepare__`的返回值中并不已经包含`类的属性信息(类变量、类方法)`
+- 返回的对象必须是dict，如果在`__prepare__`中使用自定义dict类型，需要在`return`之前，将其转化为dict。
+- 接受定义类时传入的位于`metaclass`之后的变量。
+	```py
+	# 其中{"a": 1, "b":2}会被传入 __prepare__中的`kwargs`中
+	class A(metaclass=Meta, a=1, b=2):
+			pass
+	```
+- `__prepare__`返回的结果并不是直接传入了`__new__`
+
+	传入`__new__`中的classdict, 其中不仅包含了`__prepare__`中自定义的数据，还包含了类属性数据(类变量、function)
+
+### __new__
+```py
+class Meta(type):
+	def __call__(cls, *args, **kwargs):
+			return super().__call__(*args, **kwargs)
+
+
+class A(metaclass=Meta):
+	def __new__(cls, *args, **kwargs):
+		return super().__new__(cls, *args, **kwargs)
+
+	def __init__(self):
+		pass
+
+	def __call__(self, *args, **kwargs):
+		pass
+```
+
+`__new__`中有一些奇怪的点。
+
+__new__一般不需要调用`classmethod`装饰器名，但形参中第一个传入的却是`class object`。
+
+当通过`a = A()`示例化一个对象时，直接调用的是`Meta.__call__`。在`Meta.__call__`中依次`A.__new__`和`A.__init__`。
+
+这里奇怪的点是，当在一个`instance`(这里是class)上调用某个方法，一般调用的是对应`class`(这里是Meta)上的方法。
+
+> 这里可以参照`__call__`思考。`a = A()`调用的是`Meta.__call__`而不是`A.__call__`。
+
+但调用`__new__`时，直接调用了instance(这里是class)的`__new__`，而且没有调用class(这里是Meta)上的`__new__`。
+
+
+### __call__ & __init__
+
+- 和普通方法没有区别
+- 定义在`class`中的`__call__`，会将该class的instance变为一个callable对象，至于返回的对象，可以随意设置。
 
 ## reference
 

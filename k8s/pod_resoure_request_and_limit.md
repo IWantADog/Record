@@ -9,14 +9,16 @@
 需要注意cpu/memory在limit上差异
 
 - 当一个pod的cpu limit设置后，pod的cpu使用不会超过limit
-- 当一个pod的memory limit设置后，当pod实际使用的memory超过limit，pod会报`Out Of Memory（OOM）`异常。
+- 当一个pod的memory limit设置后，当pod实际使用的memory超过limit，pod会报`Out Of Memory（OOM）`异常，并被kill。
 
 limit/request对于cpu和memory
 - 当一个container的cpu被限制，实际限制的是该container在运行的node上的整个cpu时间。
 
   例如：一个container的cpu limit为1cpu，运行在一个16core的node上。则该container实际的cpu运行时间为整个cpu时间的十六份之一。并且该container并不一直运行在单一cpu，而是可能在不同的cpu之间切换运行。
 
-- 当一个container的memory被限制，并不是该container只能访问到这些memory。如果使用top命令，实际获取的是当前node的整个memeory使用情况。
+- 当一个container的memory被限制，并不是该container只能访问到这些memory。如果在该container内部使用top命令，实际获取的是当前node的整个memeory使用情况。
+
+  这也意味着，如果应用基于内存或cpu核数触发一些行为。结果可能和预想的有差别。
 
 ## Quality of Service(QoS)
 - BestEffort(the lowest priority)
@@ -47,14 +49,8 @@ QoS是pod的一种属性，表明当node资源不足pod被清除的优先级。
 
 ## 监控pod资源使用情况
 
-pass
+cAdvisor & Heapster
 
+cAdvisor搜集单个node上所有pod的资源使用情况，Heapster向集群中的每个node上的cAdvisor搜集数据并聚合。
 
-
-
-
-
-
-
-
-
+可以通过`InfluxDB and Grafana`收集并可视化数据。

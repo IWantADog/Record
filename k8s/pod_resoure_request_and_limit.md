@@ -1,15 +1,23 @@
 # pod resource request and limit
 
-## request/limit对pod被schedule的影响
-- LeastRequestedPriority: 优先选择空闲资源较多的node
-- MostRequestedPriority: 优先选择空闲资源较少的node，是node上的pod更紧凑，减少node数量
-- scheduler向node分配pod时，主要关注的是所有pod`request`的cpu和memory总和，而不是实际使用的memory和cpu。
-- 一个node上的所有pod的cpu/memory limit可以超过该node实际拥有的资源。
+## 理解cpu/memory request对pod分配的影响
+- request仅表明一个pod需要使用cpu/memory的最小值
+- 实际pod对cpu/memory资源的使用可以小于或大于request的值
+- 当向一个node上分配pod时，scheduler会计算node上剩余未被使用的资源，计算的方式是：`node总资源 - 该node上所有pod request的资源总和`。如果未被分配的资源小于request的资源，则pod不会被分配到该node上。（scheduler并不关心，node上所有pod实际使用的资源情况）
+- pod被scheduler分配时可以设置的属性
+  - LeastRequestedPriority: 优先选择空闲资源较多的node
+  - MostRequestedPriority: 优先选择空闲资源较少的node，使node上的pod更紧凑，减少node数量
+- pod cpu request不仅影响pod被分配，也同时影响所有pod在cpu时间上的共享
+  - 当node上的cpu时间**有剩余时（即all > request）**，剩余cpu时间会按照每个pod的request等比例分配。但如果其他container都处于空闲状态，某个container可以用满所有的cpu。
+  > 需要注意这些情况发生在cpu有剩余时间时，如果cpu已被用满，则新pod会一直处于pending状态。
 
-需要注意cpu/memory在limit上差异
+## 限制container对资源的使用
 
-- 当一个pod的cpu limit设置后，pod的cpu使用不会超过limit
-- 当一个pod的memory limit设置后，当pod实际使用的memory超过limit，pod会报`Out Of Memory（OOM）`异常，并被kill。
+- 一个node上的所有pod的cpu/memory limit可以超过该node实际拥有的资源(和require不同)。当node上的实际使用的资源，超过了拥有的资源，某些container会被kill。
+
+- 需要注意cpu/memory在limit上差异
+  - 当一个pod的cpu limit设置后，pod的cpu使用不会超过limit
+  - 当一个pod的memory limit设置后，当pod实际使用的memory超过limit，pod会报`Out Of Memory（OOM）`异常，并被kill。
 
 limit/request对于cpu和memory
 - 当一个container的cpu被限制，实际限制的是该container在运行的node上的整个cpu时间。

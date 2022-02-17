@@ -5,3 +5,5 @@
 [controller](./controller.md)
 
 [common_command](./common_command.md)
+
+[pod resource require/limit](./pod_resoure_request_and_limit.md)

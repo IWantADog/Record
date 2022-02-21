@@ -39,3 +39,18 @@ HorizontalPodAutoscaler(HPA)
 autoscaling的最低pod数量不应该等于0
 
 ## 纵向扩展pod
+
+不常用，直接跳过。
+
+## 横向扩展集群node
+
+### 扩展node的流程
+1. 当一个pod被新建，但现有的所有node都无法接受该pod时，满足扩展node的条件。
+2. 检查所有可拿到的node type中是否有适合该pod的node。如果存在则选择（如果存在多个合适的node type，则从其中选择最合适的node）。
+> 这里的`最合适`需要通过配置文件设置（TODO: 如何设置）；最坏的情况是从中任选一个。
+3. 新node被创建，kubectl将该node注册到集群中。
+4. pod被分配到改node上。
+
+### 手动设置node状态
+- `kubectl cordon <node>`: 手动设置一个node不再接受新pod，但该node上正在运行的pod不会被驱逐。
+- `kubectl drain <node>`: 手动设置一个node不在接受新pod，并驱逐改node上正运行的pod。

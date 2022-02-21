@@ -7,3 +7,5 @@
 [common_command](./common_command.md)
 
 [pod resource require/limit](./pod_resoure_request_and_limit.md)
+
+[autoscaling pod/nodes](./automatic_scaling_pod_and_nodes.md)

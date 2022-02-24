@@ -17,7 +17,7 @@
 
 ## 使用node affinity控制pod被分配到指定node
 
-通过node affinity设置pod只能被分配包含指定lable的node。提供更灵活，更强大的功能。
+通过`node affinity`设置pod只能被分配包含指定lable的node。提供更灵活，更强大的功能。
 
 - requiredDuringSchedulingIgnoredDuringExecution
   - requiredDuringScheduling: pod必须被分配到包含该lable的node
@@ -35,3 +35,12 @@
 
 使用`anti-affinity`可以控制两种pod不同时出现在一个node上。
   - 使用`topologyKey`: 控制pod不会同时出现在一个node，或是同一个区域
+
+
+## Reference
+
+还是官方文档解释的详细
+
+https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
+
+https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/

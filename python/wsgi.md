@@ -41,7 +41,6 @@ http://ivory.idyll.org/articles/wsgi-intro/what-is-wsgi.html
 
 Werkzeug不是一个框架。它是一个工具库，用途是帮助python web框架或web applicaiton作者实现wsgi。
 
-
 ## what middleware can do
 
 - Handle web application errors

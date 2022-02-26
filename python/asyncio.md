@@ -1,31 +1,43 @@
-# python asyncio
+# about asyncio
 
-## Awaitable
-
-We say that an object is an awaitable object if it can be used in an await expression. Many asyncio APIs are designed to accept awaitables.
-
-There are three main types of awaitable objects: coroutines, Tasks, and Futures.
+## Coroutines and Tasks
 
 ### Coroutines
 
-- a coroutine function: an async def function;
-- a coroutine object: an object returned by calling a coroutine function.
+一个方法使用`async/await`定义，则被成为`coroutine function`。
+一个`coroutine function`返回的对象是一个`coroutine object`。
 
-### Task
+```py
+"""a simple example"""
+import asyncio
 
-Tasks are used to schedule coroutines concurrently.
+async def main():
+	print("hello")
+	await asyncio.sleep(1)
+	print("world")
 
-When a coroutine is wrapped into a Task with functions like asyncio.create_task() the coroutine is automatically scheduled to run soon.
+asyncio.run(main())
+```
 
-### Futures
+### Awaitables
 
-A Future is a special low-level awaitable object that represents an eventual result of an asynchronous operation.
+当一个`object`能够被`await`使用，则它就能被称为是`awaitables`。
+常见的`awaitables`的类型有`Coroutines`、`Tasks`、`Futures`。
 
-When a Future object is awaited it means that the coroutine will wait until the Future is resolved in some other place.
+- Corotines: 使用`async`定义的方法
+- Task: 使用`asyncio.create_task()`包装一个`Corotines`
+- Futures: 过于底层，不用深究
 
-Future objects in asyncio are needed to allow callback-based code to be used with async/await.
+### 运行一个`asyncio`项目
 
-Normally there is no need to create Future objects at the application level code.
+- asyncio.run()
+- asyncio.gather()
+- asyncio.sleep()
+- asyncio.wait_for()
+
+
+## Streams
+
 
 ## Running a asyncio program
 
@@ -34,3 +46,14 @@ https://docs.python.org/3/library/asyncio.html
 ## How asyncio work
 
 https://stackoverflow.com/questions/49005651/how-does-asyncio-actually-work
+
+
+## async in flask
+- async在flask原理
+- async在flask中的实现与完全使用``
+- 算了，先搞清楚如何使用greenlet&gevent
+
+
+### greenlet
+- thread由系统调度。greenlet由用户调度？
+- greenlet的调度可以完全由用户来控制。

@@ -21,7 +21,7 @@
 ## 关于module搜索
 
 当导入一个模块时，python的搜索逻辑
-1. sys.module，存储所有已经被import过的module。
+1. sys.module，存储已经被import过的module。
 2. python standard library
   - python官方提供的模块
 3. sys.path

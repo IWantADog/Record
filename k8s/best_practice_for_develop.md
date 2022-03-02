@@ -35,4 +35,21 @@ shut down的主要逻辑次序
 
 container的停止时间（temination grace period）能够通过`spec.terminatinGracePeriodSeconds`设置。
 
+## 确保所有请求都被合理的处理
 
+### 确保pod启动时，所有请求被合理处理
+
+通过`readiness probe`实现
+
+### 确保pod被终止时，所有请求被合理处理
+
+- 当pod被删除时引发的一系列事件
+  同时有两件事被触发，并且是并行执行
+  - 删除pod
+    1. api server通知kubelet删除pod
+  - 更新endpoint和iptable
+    1. api server通知`Endpoint controller`修改endpoint
+    2. `Endpoint Controller`回复api server
+    3. api server通知所有的`kube-proxy`并更新`iptables`
+
+没有完美的解决方法，唯一能做的就是在pod被完全删除之前，等待一段时间。这里的主要目的是，等待已建立的连接尽可能的响应。当时间耗尽，就强制删除pod。

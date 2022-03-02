@@ -73,3 +73,35 @@ netstat -lu
 `rpm -qf package`
 
 ## control user login shell
+
+
+## how to use search in vim
+
+命令基本形式`:[range]s/{pattern}/{string}/[flags] [count]`
+- range: 命令搜寻返回
+- pattern: 搜寻的样式
+- string: 需要被替换的内容
+- count: 重复命令的次数
+> 如果没有`[range]`和`[count]`，则仅替换当前游标行所处的行的第一个匹配的数据。
+
+`:s/foo/bar/`: 替换当前行的第一个匹配项
+
+`:s/foo/bar/g`: 替换当前行的所有匹配项
+
+`:%s/foo/bar/g`: 替换整个文件下的所有匹配项
+
+`:s/foo//g`: 如果`{string}`被省略，将所有匹配项替换为`空字符串`
+
+`:s/foo/bar/gc`: 每次替换前询问
+
+`:s/foo/bar/gi`: 设置忽略大小写（默认为大小写敏感）
+
+`:3,10s/foo/bar/g`: 设置替换的范围（line3-line10）
+  - `.`: 游标的当前行
+  - `$`: 文件的最后一行
+  - 通过`+/-`指定范围。
+    `:.,+4s/foo/bar/g`: 表示替换当前游标的后4行
+
+`:s/\<foo\>/bar/`: 查找完整的单词。
+
+https://linuxize.com/post/vim-find-replace/

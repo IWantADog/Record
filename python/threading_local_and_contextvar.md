@@ -5,7 +5,9 @@
 [_threading.local](https://github.com/python/cpython/blob/main/Lib/_threading_local.py
 )
 
-`threading.local`。不同的线程访问同一个实例化后`local`对象，只会得到属于该线程的数据。
+使用说明:
+- 声明一个全局化的实例
+- 不同的线程访问同一个全局`local`对象，只会得到属于该线程的数据
 
 ```py
 >>> from threading import Thread as T

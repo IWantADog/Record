@@ -1,15 +1,27 @@
 # python import
 
-## summary
+`import`实际的操作分为两步。1) 搜索给定的moduel，具体的搜索逻辑位于`__import__`. 2) 将搜索到的model绑定到变量名上。
 
-It’s important to keep in mind that all packages are modules, but not all modules are packages. Or put another way, packages are just a special kind of module. Specifically, any module that contains a __path__ attribute is considered a package.
+如果一个module是被第一次搜索，则会实例化一个module object。如果无法发现，则报`ModuleNotFoundError`。
 
-When a regular package is imported, this __init__.py file is implicitly executed, and the objects it defines are bound to names in the package’s namespace. The __init__.py file can contain the same Python code that any other module can contain, and Python will add some additional attributes to the module when it is imported.
+如果module已被import过，则会缓存在`sys.module`中。这会造成一旦import一个module，后续对该module的import获取的都是第一次生成的module实例。
+  > `sys.module`实际是一个dict。（key为module名，value为module实例）
 
-## 结论
+## 在代码中调用import
 
-导入一个模块时，python寻找的地方
-1. sys.module
+- importlib.import_module
+
+## 关于packages
+
+- python仅拥有一种`module type`，所有的modele都是同一种类型。
+- 为了管理module引入了package的概念
+- package也是一种module
+  > 所有的package都是moduel，但module并不一定是package。
+
+## 关于module搜索
+
+当导入一个模块时，python的搜索逻辑
+1. sys.module，存储已经被import过的module。
 2. python standard library
   - python官方提供的模块
 3. sys.path
@@ -20,10 +32,4 @@ When a regular package is imported, this __init__.py file is implicitly executed
 
 [python import](https://docs.python.org/3.7/reference/import.htmls)
 
-[PEP 302](https://www.python.org/dev/peps/pep-0302/)
-
-[PEP 366](https://www.python.org/dev/peps/pep-0366/)
-
-[PEP 328](https://www.python.org/dev/peps/pep-0328/)
-
-[PEP 420](https://www.python.org/dev/peps/pep-0420/)
+[python importlib](https://docs.python.org/3/library/importlib.html#module-importlib)

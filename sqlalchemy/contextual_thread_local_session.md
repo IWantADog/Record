@@ -6,17 +6,17 @@
 
 1. A `scoped_session` is constructed by calling it, passing it a factory which can create new `Session` objects.
     ```py
-    >>> from sqlalchemy.orm import scoped_session
-    >>> from sqlalchemy.orm import sessionmaker
+    from sqlalchemy.orm import scoped_session
+    from sqlalchemy.orm import sessionmaker
 
-    >>> session_factory = sessionmaker(bind=some_engine)
-    >>> Session = scoped_session(session_factory)
+    session_factory = sessionmaker(bind=some_engine)
+    Session = scoped_session(session_factory)
     ```
     > 将 `sesssion_factory` 传入 `scoped_session` 中，获取 `scoped session object`
 
 2. The `scoped_session object` we’ve created will now call upon the `sessionmaker` when we “call” the registry:
     ```py
-    >>> some_session = Session()
+    some_session = Session()
     ```
     > 直接调用 `scopted session object` 会返回一个 `session` instance
 

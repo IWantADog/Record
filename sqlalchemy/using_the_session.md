@@ -149,9 +149,9 @@ When an ORM mapped object is loaded into memory, there are three general ways to
 The actual state of any mapped object can be viewed at any time using the `inspect()` system:
 
 ```py
->>> from sqlalchemy import inspect
->>> insp = inspect(my_object)
->>> insp.persistent
+from sqlalchemy import inspect
+insp = inspect(my_object)
+insp.persistent
 True
 ```
 

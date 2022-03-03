@@ -1,7 +1,5 @@
 # sqlalchemy common use
 
-
-
 ## Establishing Connectivity - the Engine
 
 ### create engine
@@ -17,12 +15,11 @@
 
 ### Getting a Connection
 
-```sh
->>> from sqlalchemy import text
-
->>> with engine.connect() as conn:
-...     result = conn.execute(text("select 'hello world'"))
-...     print(result.all())
+```py
+from sqlalchemy import text
+with engine.connect() as conn:
+    result = conn.execute(text("select 'hello world'"))
+    print(result.all())
 ```
 
 __The default behavior of the Python DBAPI includes that a `transaction` is always in progress; when the scope of the connection is released, a `ROLLBACK` is emitted to end the transaction. The transaction is not committed automatically; when we want to commit data we normally need to call `Connection.commit()` as we’ll see in the next section.__
@@ -38,13 +35,13 @@ __The default behavior of the Python DBAPI includes that a `transaction` is alwa
 
 ### how to use session
 
-```sh
->>> with Session(engine) as session:
-...     result = session.execute(
-...         text("UPDATE some_table SET y=:y WHERE x=:x"),
-...         [{"x": 9, "y":11}, {"x": 13, "y": 15}]
-...     )
-...     session.commit()
+```py
+with Session(engine) as session:
+    result = session.execute(
+        text("UPDATE some_table SET y=:y WHERE x=:x"),
+        [{"x": 9, "y":11}, {"x": 13, "y": 15}]
+    )
+    session.commit()
 ```
 
 > The Session doesn’t actually hold onto the `Connection` object after it ends the transaction. It gets a new `Connection` from the `Engine` when executing SQL against the database is next needed.
@@ -80,17 +77,14 @@ Column('user_id', ForeignKey('user_account.id'), nullable=False),
 
 `registry` & `MetaData` & `ORM Mapped Table`
 
-> 如何理解`registry`。
-
-
-```sh
->>> from sqlalchemy.orm import registry
->>> mapper_registry = registry()
->>> Base = mapper_registry.generate_base()
+TODO: 如何理解`registry`。
+```py
+from sqlalchemy.orm import registry
+mapper_registry = registry()
+Base = mapper_registry.generate_base()
 ```
 
 > 通过`registry`，获取`ORM Mapped Table`基类
-
 
 - tip
 
@@ -128,8 +122,8 @@ Both the `Select.join()` and `Select.join_from()` methods accept keyword argumen
 
 ### Aggregate functions with GROUP BY / HAVING
 
-```sh
->>> from sqlalchemy import func
+```py
+from sqlalchemy import func
 ```
 
 ### use aliases
@@ -160,7 +154,7 @@ __The primary key identity of the objects are significant to the `Session`, as t
 
 > Try to avoid using objects in their detached state, if possible. When the Session is closed, clean up references to all the previously attached objects as well. __For cases where detached objects are necessary, typically the immediate display of just-committed objects for a web application where the Session is closed before the view is rendered, set the `Session.expire_on_commit` flag to False.__
 
-> `session`触发`commit`后，对象属性的访问是重新从数据库中查询的。可以通过`Session.expire_on_commit`修改这个行为，如果有需要的话。
+> `session`触发`commit`后，对象属性的访问是重新从数据库中查询的。可以通过`Session.expire_on_commit`修改这个行为，如果有需要的话。
 
 ## Working with Related Objects
 

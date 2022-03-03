@@ -53,3 +53,17 @@ container的停止时间（temination grace period）能够通过`spec.terminati
     3. api server通知所有的`kube-proxy`并更新`iptables`
 
 没有完美的解决方法，唯一能做的就是在pod被完全删除之前，等待一段时间。这里的主要目的是，等待已建立的连接尽可能的响应。当时间耗尽，就强制删除pod。
+
+## 在k8s中合理控制和管理app
+- 合理控制image的大小；但也需要包含若干便于调试的命令
+- 添加多个、合理的lable
+- 添加合理的annotation
+  - 依赖的服务列表
+  - 维护人员列表
+- 记录容器被kill的信息
+  - spec.containers[0].terminationMessagePath: 指定当container被中止时，信息被写入的文件路径。
+- 处理app日志
+  - 查看单一pod日志
+    - kubectl logs (--previous)
+    - 集中式管理日志
+      - FluentD

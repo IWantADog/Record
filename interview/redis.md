@@ -42,4 +42,4 @@ AOF持久化是将所有的被执行的写命令写入文件中。AOF不会造�
 
 ## redis事务
 
-## Redis Sentinal && Redis Cluster
+## Redis Sentinal && Redis Cluster

@@ -117,3 +117,10 @@ ip协议作用在网络层
 tcp/udp作用在传输层
 
 http/ftp/dns等协议作用在应用层
+
+
+## http & https
+
+http数据通过明文传递
+
+https对数据进行加密后再传递。https = http + ssl协议。ssl位于tcp和各种应用层协议之间。https协议更安全，不过建立ssl连接需要额外的开销，所以性能方面不如http。

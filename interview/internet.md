@@ -30,13 +30,20 @@ post的请求参数通过请求体发送。post请求无法被缓存。
 - Host: 服务器域名
 - User-Agent: 浏览器身份标识
 - Cache-Control: 此次请求及响应的浏览器的缓存机制
-- If-Match: 
+- If-Match: 如果满足ETag的条件，对于`get`和`head`返回缓存的结果，对于`put`和其他不安全的方法上传资源。如果条件匹配，则返回`412`
+- If-Modified-Since: 如果请求的资源在发送的时间之后修改过，返回200；如果请求的资源没有别修改过，则返回304（没有响应体）。仅可被`get` & `head`使用。
+- If-None-Match: ？？？
+- ETag: 供缓存使用
 
 #### status code
+
+100: http协议内部使用。
 
 200: 请求成功
 
 300: 重定向相关
+
+304 not modified: 请求的资源没被修改过。重定向请求并返回缓存的数据。
 
 400 bad request: 请求体存在格式错误
 
@@ -93,12 +100,6 @@ udp
 
 基于udp的应用层协议：dns、rip
 基于tcp的应用层协议：http、smtp、telnet、ftp
-
-### restful api基本原理
-
-- restful api是一种规范
-- 面向资源，每个url都代表一个资源
-- 通过http method来操作资源
 
 
 ## 网络分层模型

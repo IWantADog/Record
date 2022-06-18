@@ -2,9 +2,7 @@
 
 - [网络](./internet.md)
 
-- [操作系统] TODO:
-  - 进程
-  - 线程
+- [操作系统](./os.md)
 
 - [python](./python.md) TODO: 待重新整理
   - 协程（gevent）
@@ -13,7 +11,8 @@
 
 - [数据结构与算法] TODO:
 
-- [mysql] TODO:
+- [database](./database.md)
+  - [mysql](./mysql.md)
 
 - [redis](./redis.md)
 

@@ -21,3 +21,9 @@ grep
 whereis
 
 which
+
+chmod
+
+chown
+
+chgrp

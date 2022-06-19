@@ -4,7 +4,7 @@
 
 - [操作系统](./os.md)
 
-- [python](./python.md) TODO: 待重新整理
+- [python](./python.md)
   - 协程（gevent）
 
 - [设计模式] TODO:
@@ -18,11 +18,11 @@
 
 - [restful api](./restfurl_api.md)
 
-- [linux] TODO:
+- [linux](./linux.md)
 
-- [docker] TODO:
+- [docker](./docker.md)
 
-- [k8s] TODO:
+- [k8s](./k8s.md)
 
 - [微服务] TODO:
 

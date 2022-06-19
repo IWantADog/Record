@@ -7,11 +7,7 @@
 - [python](./python.md)
   - 协程（gevent）
 
-- [设计模式]
-  - 单例模式
-  - 代理模式
-  - 工厂模式
-  - 策略模式
+- [设计模式](../books/design_patterns.md)
 
 - [数据结构与算法] TODO:
 

@@ -9,7 +9,7 @@
 
 - [设计模式](../books/design_patterns.md)
 
-- [数据结构与算法] TODO:
+- [数据结构与算法](./algo.md)
 
 - [database](./database.md)
   - [mysql](./mysql.md)
@@ -26,4 +26,4 @@
 
 - [微服务](../books/build_microservices.md)
 
-- [grpc] TODO:
+- [grpc](./grpc.md)

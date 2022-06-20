@@ -16,7 +16,7 @@
 
 - [redis](./redis.md)
 
-- [restful api](./restfurl_api.md)
+- [restful api](./restful_api.md)
 
 - [linux](./linux.md)
 

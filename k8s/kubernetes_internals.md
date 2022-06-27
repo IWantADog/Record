@@ -52,10 +52,10 @@ add-on components
     2. 对比`实际状态`和`指定状态`即配置文件中指定的状态。
     3. 向`api server`发送请求，更新资源的状态。
   - 不同的controller之间不相互通讯，甚至不知道之间的存在。
-- 关于`kubectl`的相关概念
-  - `kubectl`运行在`work node`上。(其他的组件都运行在`master node`上)
+- 关于`kubelet`的相关概念
+  - `kubelet`运行在`work node`上。(其他的组件都运行在`master node`上)
   - 主要职责: 
-    1. 注册`kubectl`运行的node到`api server`。
+    1. 注册`kubelet`运行的node到`api server`。
     2. 从`api server`订阅分配到该node上pod的信息，当pod状态改变通知`container runtime`。
     3. 持续关注运行在该node上的容器，将其状态发送给`api server`。
     4. 运行`liveness prode`。

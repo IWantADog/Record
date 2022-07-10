@@ -1,4 +1,4 @@
-# mysql base
+# High Performance MySQl
 
 - [x] 3. 服务器性能剖析
 - [x] 4. schema于数据类型优化

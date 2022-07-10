@@ -1,3 +1,3 @@
 # mysql
 
-- [index](./index.md)
+- [High Performance MySQL](./High_Performance_Mysql.md)

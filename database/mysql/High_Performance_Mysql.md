@@ -2,7 +2,7 @@
 
 - [x] 3. 服务器性能剖析
 - [x] 4. schema于数据类型优化
-5. 索引
+- [x] 5. 索引
 6. 查询数据优化
 7. mysql高级特性
 8. 优化服务器配置
@@ -75,6 +75,8 @@ mysql执行大部分修改表结构操作的方法是用新的结构创建一个
 
 ### mysql中索引的类型
 InnoDB使用的是B+Tree
+
+[B+Tree in InnoDB](https://blog.jcole.us/2013/01/10/btree-index-structures-in-innodb)
 
 - B-Tree索引
   - B-Tree按顺序存储，适合查找范围数据，并且可以通过索引的字段排序
@@ -200,6 +202,73 @@ InnoDB会对访问的行加锁，通过索引仅获取需要的行，仅对最�
 
 `OPTIMIZE TABLE`
 
-## 参考
 
-[B+Tree in InnoDB](https://blog.jcole.us/2013/01/10/btree-index-structures-in-innodb)
+## 查询性能优化
+
+1. 仅获取需要的数据
+2. 从扫描数据行数和返回的数据行数的角度思考问题
+
+### mysql查询执行的基础
+
+<img src='../statistic/mysql_sql_process.png'>
+
+- mysql客户端与服务器之间的通信协议是`半双工`的，这意味着，在任何一个时刻，要么是由服务器向客户端发送数据，要么是由客户端向服务器发送数据。
+
+mysql缓存是否常用？TODO:
+
+#### MySQL如何执行关联查询
+
+mysql对于任务`关联`都执行嵌套循环关联操作，即mysql先在一个表中循环取出单条数据，然后再嵌套循环到下一个表中寻找匹配的行，依次下去，直到找到所有表中匹配的行为为止。然后根据各个表匹配的行，返回查询中需要的各个列。mysql会尝试在最后一个关联表中找到所有匹配的行，如果最后一个联表无法找到更多的行以后，mysql返回到上一层次关联表，看是否能够找到更多的匹配记录，依此类推迭代执行。
+
+> 关联的概念: 实际指所有的查询(从单表、从临时表、UNION不同结果之间、子查询)
+
+```伪码
+select tbl1.col1, tbl2.col2
+from tbl2 inner join tbl2 using(col3)
+where tbl1.col in (5,6)
+
+<!-- 等价于 -->
+
+outer_iter = iterator over tbl1 where col1 in (5,6)
+outer_row = outer_iter.next
+while outer_row
+    inner_iter = iterator over tbl2 where col3=outer_row.col3
+    inner_row = inner_iter.next
+
+    while inner_now
+        output [out_row.col1, inner_row.col2]
+        inner_row = inner_iter.next
+    end
+
+    outer_row = outer_iter.next
+end
+```
+
+```伪码
+<!-- 外连接 -->
+select tbl1.col1, tbl2.col2
+from tbl1 left outer join tbl2 using(col3)
+where tbl1.col1 in (5, 6)
+
+<!-- 等价于 -->
+
+outer_iter = iterator over tbl1 where col1 in (5,6)
+outer_row = outer_iter.next
+while outer_row
+    inner_iter = iterator over tbl2 where col3=outer_row.col3
+    inner_row = inner_iter.next
+
+    if inner_row:
+        while inner_now
+            output [out_row.col1, inner_row.col2]
+            inner_row = inner_iter.next
+        end
+    else:
+        output [out_row.col1, NULL]
+    end
+
+    outer_row = outer_iter.next
+end
+```
+
+409

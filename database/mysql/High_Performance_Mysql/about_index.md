@@ -133,3 +133,7 @@ InnoDB会对访问的行加锁，通过索引仅获取需要的行，仅对最�
 ### 维护索引和表
 
 `OPTIMIZE TABLE`
+
+## reference
+
+[create index](https://dev.mysql.com/doc/refman/8.0/en/create-index.html#create-index-unique)

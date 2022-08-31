@@ -51,6 +51,8 @@ innodb存储引擎中有3中锁的算法：
 
   示例：如果一个索引包含1，2，5，则可以将加锁的区间为 (-inf, 1), [1, 2), [2, 5), [5, +inf)。
 
+InnoDB对于行的查询都采用Next-Key Lock这种方法。
+
 > 如果查询的索引含有*唯一属性*时，InnoDB存储引擎会对*Next-Key Lock*进行优化，将其降级为*Record Lock*。
 
 唯一属性降级为Record Lock示例:

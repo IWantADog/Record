@@ -4,10 +4,11 @@
 - [x] 2
 - [x] 3
 - [x] 4
-- [] 5
-- [] 6
-- [] 7
+- [x] 5
+- [x] 6
+- [x] 7
 - [] 8(略读)
+
 
 ## 1 mysql体系结构和存储引擎
 
@@ -62,7 +63,7 @@ checkpoint
 - 
 
 master thread
-- 将redo日志写入磁盘（即使事物还未被提交）
+- 将redo日志写入磁盘（即使事务还未被提交）
 - 合并插入缓冲
 - 刷新缓冲池脏页到磁盘
 - 删除无用的undo页
@@ -74,10 +75,8 @@ InnoDB的关键特性
   change buffer是一种数据结构。当对*secondary index*修改（insert/update/delete），而该索引还未被读入内存时，就会创建change buffer。
 
   change buffer的主要目的是解决*secondary index*写入磁盘的效率问题。由于*secondary index*的更新数据一般是随机无序的，会造成大量的随机io。所以当需要更新的索引不在内存中时，innodb会先创建*change buffer*；当需要更新的索引被读入内存，则会将*change buffer*和*secondary index*进行合并。
-  
-  TODO: 为什么要将insert buffer写入磁盘
 
-  插入缓冲也会写入磁盘上。  
+  change buffer在内存和磁盘上都有。  
 
   innodb对于对象的删除分为两个过程。1）将记录标记为已删除，2）真正将记录删除。*delete buffer*在过程1中被使用，*pure buffer*在过程2中被使用。
 
@@ -85,15 +84,16 @@ InnoDB的关键特性
 
   doublewirte是为了解决数据从内存写入磁盘可能发生的写入异常中断问题，保证数据页写入的可靠性。
 
-  数据页从内存写入磁盘时，会先将数据写入*double write buffer*（内存中），再讲*double write buffer*写入磁盘中，最后才通过内存中的*double write buffer*更新磁盘上的页数据。当写入失败时，innodb能够从磁盘上的*double write buffer*获取完整的数据。
+  数据页从内存写入磁盘时，会先将数据写入*double write buffer*（内存中），再将*double write buffer*写入磁盘中，最后才通过内存中的*double write buffer*更新磁盘上的页数据。当写入失败时，innodb能够从磁盘上的*double write buffer*获取完整的数据。
 
   虽然写入了两次，当讲内存中的*double write buffer*写入磁盘中属于顺序写入，所以对性能的不大。
 
 - 异步io
-  - 可以将多个io合并为一个io
+  - 可以将多个io合并为一个io，即将对于多次io对同一个页的访问，合并为一次。
 
-- 启动、关闭和恢复
-  pass
+  - 刷新邻接页
+
+    InnoDB还提供了`Flush Neighbor Page`的特性。它的工作原理是：当刷新一个脏页时，InnoDB存储引擎会检测该页所在的区（extent）的所有页，如果是脏页，则一起刷新。这样可以使用AIO将多个io合并为一个io。
 
 ## 3 文件
 
@@ -101,7 +101,6 @@ InnoDB的关键特性
 - 手动设置一个阈值*long_query_time*，如果sql的查询大于设置的值，则该sql会被记录到慢查询日志
 - 对于没有启用索引的表，可能导致慢查询日志不断的增大，可以通过*log_throttle_queries_not_using_indexes*来限制每分钟允许记录到*slow log*中而且没有使用索引的sql
 - 对于较大的*slow log*使用mysql提供的*mysqldumpslow*进行分析
-
 
 表结构定义文件
 - frm文件
@@ -199,4 +198,3 @@ InnoDB的关键特性
   null值的处理：
   - range/hash/key都是讲null值放入第一个分区
   - list需要显示的指定null值放在那个分区
-

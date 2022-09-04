@@ -1,0 +1,44 @@
+@startmindmap
+* database
+** lock
+*** 锁的分类
+**** 行级锁
+***** 共享锁
+***** 排他锁
+**** 表级锁
+***** 意向共享锁
+***** 意向排他锁
+*** 锁的算法
+**** record lock
+**** gap lock
+**** next key lock
+**** insert intention lock
+** mvcc
+*** 一致性非锁定读
+*** 一致性锁定读
+** 事务
+*** ACID
+**** 原子性
+**** 一致性
+**** 隔离性
+**** 持久性
+*** redo log
+*** undo log
+*** 事务的隔离级别
+** index
+*** b+ tree
+**** 聚集索引
+**** 辅助索引
+**** 覆盖索引
+**** leftmost prefix
+**** MRR（multi-range read）
+**** ICP（index condition pushdown）
+*** hash
+**** 自适应hash索引
+*** fulltext
+**** 倒排索引
+** advanced
+*** change buffer
+*** dobule write
+*** aio(异步io)
+@end

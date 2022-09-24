@@ -482,14 +482,75 @@ case <- abort:
 default:
   // do nothing
 }
-
 ```
 
+## 使用共享变量实现并发
 
+*根本没有什么温和的数据竞争*
 
+避免数据竞争的方法：
+1. 不要修改变量。
+2. 避免从多个goroutine访问同一个变量。将对变量的修改限制在一个goroutine中。
+> 不要通过共享内存来通信，而应该通过通信来共享内存
+3. 使用锁机制保证资源的互斥
 
+### 互斥锁 sync.Mutex
 
+```go
+// 使用通道实现的互斥
+var (
+  sema = make(chan struct {}, 1)
+  balance int
+)
 
+func Deposit(amount int) {
+  sema <- struct {}{}
+  balance = balance + amount
+  <-sema
+}
 
+func Balance() int {
+  sema <- struct{}{}
+  b := balance
+  <-sema
+  return b
+}
+```
 
+TODO: 说实话，我不明白则意味着什么
+> go中的互斥量是不可再入的
+
+### 读写互斥锁：sync.RWMutex
+
+多读单写锁：允许只读操作可以并发执行，但写操作需要获取完全独享的访问权限。
+
+TODO: 似乎没有说明共享锁和互斥锁之间的兼容关系
+
+仅在绝大多数goroutine都在获取读锁并且锁竞争比较激烈时，RWMutex才有优势。因为RWMutex需要更为复杂的内部簿记工作，所以在竞争不激烈时它比普通的互斥锁慢。
+
+### 延迟初始化：sync.Once
+
+Once包含一个布尔变量和一个互斥量，布尔变量记录初始化是否已经完成，互斥量则负责保护这个布尔变量和客户端的数据结构。
+
+```go
+var once sync.Once
+
+once.Do(func1)
+```
+
+### 竟态检测器
+
+在go build、go run、go test中加入 *-race* 可以检查代码中是否有数据竞争。*但它的功能是有限的*
+
+### goroutine和线程
+
+*在go程序中，一次创建十万左右的goroutine并不罕见。*
+
+每个OS线程都有一个固定大小的栈内存（通常为2MB）。但一个goroutine在初始的时候只有2KB，但它可以按需增大或减小。goroutine的大小限制可以达到1GB。
+
+*go有一个自己的调度器，避免陷入系统内核，从而提高运行效率。*
+
+go使用*GOMAXPROCS*参数来确定使用多少个OS线程来同时运行GO代码。默认值是机器上的CPU数量。
+
+*goroutine没有标识*（区别于python中threading和greenlet）
 

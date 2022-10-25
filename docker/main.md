@@ -1,7 +1,9 @@
 # docker
 
 ## 需要回答的问题
-- [ ] docker和虚拟化技术之间的区别
+- [x] docker和虚拟化技术之间的区别
+  - 虚拟化技术虚拟的是硬件
+  - docker是通过linux的namespace和cgroup将不同的服务隔离起来
 - [x] docker run中--link的用法
   - link可将不同container之间的网络连接起来
 - [x] docker run中--entrypoint的用法
@@ -107,28 +109,57 @@ docker镜像的分层
 ### 联合文件系统
 - 当从联合文件系统中读取一个文件，系统会从存在该文件的最上面一层中读取。如果文件没有在最顶层被创建或者被修改，那么读取操作就会沿着层不断向下找，直到找到存在这个文件的层。
 - 当一个文件被删除或修改，一个删除/修改记录就被写入最顶层，它会遮挡底层所有该文件的版本。
-- copy-on-write： ？？？？
+- copy-on-write：当在容器中对一个已存在的文件进行修改时，会先将该文件从容器的下层复制到最上层，再进行修改。并且仅有被修改的文件才会被复制到当前层。
+- 联合文件系统由多个层以栈的形式构成，并且新的层会被添加到栈的最上方。这些层会被独立存储，每层包含这一成的改动信息和元数据。
+- 一个镜像由多个层以栈的形式构成，首先会给一个顶层作为起始点，然后根据每层原数据中的父层ID将多个层自上而下地连接起来
 
 #### 导入导出扁平文件系统
 
-160
+docker export/import
 
+## 构建自动化和高级镜像设置
 
+### dockerfile
 
+每一个dockerfile指令都会创建一个镜像层，所以尽可能的合并指令，能够减少镜像的大小和层的数量。
 
+onbuild: onbuild后面的命令在当前镜像build时，不会执行。而当将该镜像作为一个父镜像时，onbuild后面的命令才会生效。*不是很清楚使用场景*
 
+entrypoint: 可以将一个检验容器环境变量是否配置正确的脚本作为容器的入口。这是entrypoint的一个使用场景。
 
+### 初始化进程
 
+init
 
+## docker compose 声明式环境
 
+docker compose: 通过yaml文件声明多个容器，便于多容器生命周期和容器之间关系的管理。
 
+docker-compose build
 
+docker-compose up: 不加限制的话，每次调用都会重新创建并启动全部服务。并且不会影响数据卷的挂载，即使容器新建并重新启动，数据也不会丢失。可以通过`--no-dep`，仅更新一个具体的服务。
+- 但是如果多个容器之间存在依赖关系，在没有服务发现的环境下，如果某个服务需要重启，最好还是重启整个服务。如果仅重启单个应用，重启后服务ip地址的修改。会导致其他服务无法访问该服务。
 
+docker-compose scale: 对一个具体的服务进行横向扩展。
+> TODO: 不过不是很很明白，当服务扩展之后，如何控制流量进入那个服务。
 
+## Best practices for writing Dockerfiles
 
+[official link](https://docs.docker.com/develop/develop-images/dockerfile_best-practices/)
 
+### understand build context
 
+当使用`docker build`时，会将当前目录的所有文件作为*build context*发送给*docker daemon*。并且默认dockerfile在该目录下。不过也可以通过 `-f` 使用位于别处的dockerfile。
 
+build可以读如来自stdin的数据，并且不带有`build context`。具体使用如下`docker build -`，需要注意`-`的使用。
 
+https://docs.docker.com/develop/develop-images/dockerfile_best-practices/
 
+### dockefile instructions
 
+copy & add: copy和add的功能类似。copy仅支持将文件复制到容器中。add支持获取远程文件和解tar包等功能。
+> 不过官方还是建议使用copy，至于获取远程文件可以考虑使用curl/wget当方式。理由是使用这种方式能够将不需要的数据及时清除，控制容器的大小。
+
+### multi-stage build
+
+https://docs.docker.com/build/building/multi-stage/

@@ -153,7 +153,6 @@ docker-compose scale: 对一个具体的服务进行横向扩展。
 
 build可以读如来自stdin的数据，并且不带有`build context`。具体使用如下`docker build -`，需要注意`-`的使用。
 
-https://docs.docker.com/develop/develop-images/dockerfile_best-practices/
 
 ### dockefile instructions
 

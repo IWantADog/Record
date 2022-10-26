@@ -162,4 +162,6 @@ copy & add: copy和add的功能类似。copy仅支持将文件复制到容器中
 
 ### multi-stage build
 
-https://docs.docker.com/build/building/multi-stage/
+[official document](https://docs.docker.com/build/building/multi-stage/)
+
+主要的使用目的是：保证dockerfile编写的更易维护和理解，并且尽可能减少容器的体积（通过将build任务进行分层，在每个阶段容器中仅包含必须的部分）。

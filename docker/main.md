@@ -35,7 +35,7 @@ docker create --cpid: 通过cpid文件创建container，
 
 ## 3
 
-docker load/docker save
+docker load/save
 将镜像导出为文件
 
 ## 4 持久化存储和卷间状态共享
@@ -43,8 +43,9 @@ docker load/docker save
 将主机的文件系统挂载到容器中，这样及时容器被删除后，数据依然不会丢失。
 
 docker中提供了两种挂载卷
-- 绑定挂载卷：由用户指定主机上需要到容器上的文件位置
-- docker管理存储卷：有docker自行确定数据存储在主机上的位置，仅需要提供容器中的挂载路径
+- 绑定挂载卷：由用户指定主机上需要挂载到容器中的文件位置
+- docker管理存储卷：由docker自行确定数据存储在主机上的位置，仅需要提供容器中的挂载路径
+> 什么使用场景？？？
 
 `--volumes-from`: 将其他容器中挂载的卷也同样挂载到当前容器。不过volumes-from也有一些限制：
 - 不能修改容器中的挂载
@@ -81,7 +82,7 @@ docker提供了四种容器的配置，隔离程度从高到低依次为:
 
 ### include
 
-将不同容器在网络层面链接起来。使用include时必须被连接的容器必须已经存在。
+将不同容器在网络层面链接起来。使用include时被连接的容器必须已经存在。
 
 使用include建立的容器之间的连接是*静态的、单向的、不可传递的*。
 - 静态：依赖方容器，绑定的是被依赖容器的ip地址，如果ip切换则依赖会无法使用。
@@ -157,10 +158,10 @@ build可以读如来自stdin的数据，并且不带有`build context`。具体�
 ### dockefile instructions
 
 copy & add: copy和add的功能类似。copy仅支持将文件复制到容器中。add支持获取远程文件和解tar包等功能。
-> 不过官方还是建议使用copy，至于获取远程文件可以考虑使用curl/wget当方式。理由是使用这种方式能够将不需要的数据及时清除，控制容器的大小。
+> 不过官方还是建议使用copy，至于获取远程文件可以考虑使用curl/wget等方式。理由是使用这种方式能够将不需要的数据及时清除，控制容器的大小。
 
 ### multi-stage build
 
 [official document](https://docs.docker.com/build/building/multi-stage/)
 
-主要的使用目的是：保证dockerfile编写的更易维护和理解，并且尽可能减少容器的体积（通过将build任务进行分层，在每个阶段容器中仅包含必须的部分）。
+主要目的：保证dockerfile编写的更易维护和理解，并且尽可能减少容器的体积（通过将build任务进行分层，在每个阶段容器中仅包含必须的部分）。

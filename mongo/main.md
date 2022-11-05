@@ -128,24 +128,12 @@ javaScript查询运算符
 
 ## 聚合
 
+聚合管道: 将整个聚合过程拆分为若干部分，某一部分以上一部分的输出作为输入。每个聚合阶段执行独立的任务，并且聚合阶段没有数量上的限制。
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+sql和聚合框架的类比（仅便于理解，不可深究）
+select - $project, $sum, $min, $avg
+from   - db.collection.aggregate
+join   - $unwind
+where  - $match
+group  - $group
+having/where - $match

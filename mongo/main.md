@@ -62,9 +62,13 @@ mongodb中的id由12个字节的十六进制字符组成。其中前4个字节�
 
 *TTL集合*：拥有过期时间的集合。具体使用时，需要在一个`time_field`字段上创建索引。之后该字段会定期检查时间戳，并与当前时间比较，如果time_field与当前时间的差值大于`expireAfterSeconds`，文档会被自动删除。
 
-> 所有文档都会在发生给mongo之前被序列化胃BSON格式，之后再从BSON反序列化。驱动哭会处理底层的数据类型转换工作。
+> 所有文档都会在发生给mongo之前被序列化为BSON格式，之后再从BSON反序列化。驱动会处理底层的数据类型转换工作。
 
 TODO: https://www.mongodb.com/docs/v6.0/core/index-ttl/?_ga=2.253478785.942358009.1667395083-1404305546.1667308134&_gac=1.25307727.1667482288.CjwKCAjwzY2bBhB6EiwAPpUpZsiJ_W5esy-00gWfd33FDlcOF80Jtk72M5JPuY06Q6eP7z-Borv0VxoCu6IQAvD_BwE
+
+### 文档
+
+**mongo单个文档的大小限制为16MB**
 
 ## 构建查询
 
@@ -137,3 +141,42 @@ join   - $unwind
 where  - $match
 group  - $group
 having/where - $match
+
+- $out: 可以自动将聚合管道的输出结果保存到集合里。如果集合不存在，则$out会创建一个集合；如果集合存在就会完全取代现有的集合。
+  - 如果聚合失败，旧数据不会被删除。当聚合成功时，数据才会被删除。
+- $unwind: 将文档中的列表属性逐项展开。
+  - 例如：对于 `{"_id": 1, "tags": [1,2,3]}` 展开之后就会变为 `[{"_id": 1, "tags": 1}, {"_id": 1, "tags": 2}, {"_id": 1, "tags": 3}]`
+- $group:
+  - $addToSet: 将聚合的值放入一个集合，元素不重复
+  - $push: 将聚合的值放入一个列表，元素可重复
+  - $first
+  - $last
+  - $max
+  - $min
+  - $avg
+  - $sum
+- $match & $sort & $skip & $limit
+- $project
+  - 包含许多重塑文档操作符
+
+### 理解聚合管道的性能
+
+*explain*
+
+- 尽早地在管道中尝试减少文档的数量和大小
+- 索引只能用于$match和$sort操作，而且可以大大加速查询
+- 在管道中使用$match和$sort之外的操作符之后不能使用索引
+- 如果使用分片，则$match和$project会在单独的片上执行。一旦使用了其他操作符，其他的管道将会在主要片上执行。
+  - TODO: 完全不理解是什么意思
+
+### 聚合光标选项
+
+在聚合结果中通过光标获取数据。*cursor*允许我们处理大规模数据流。允许我们在返回少量文档结果的时候处理大的结果集，因此可以减少一次性处理数据所需的内存。
+
+### 其他聚合功能
+- .count:
+  - db.user.count()
+- .distinct
+  - db.user.distinct("name")
+
+## 更新、原子操作和删除

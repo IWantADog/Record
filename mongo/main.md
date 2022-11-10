@@ -229,3 +229,29 @@ TODO: mongo对于列表的查询很奇怪
 - 更新文档的大小和结构。
   - 实际的场景中，$push就是这样
 - 完全重写一个文档。如果文档扩大，现有的空间不能满足，可能还需要移动到新的空间。
+
+## 索引与查询优化
+
+mongo的索引使用的也是b树。所以mysql中关于索引的一些知识可以在mongo中复用。
+
+[about index in mongo](https://www.mongodb.com/docs/v6.0/indexes/?_ga=2.137501808.1557011951.1668005095-1404305546.1667308134&_gac=1.192687576.1667482288.CjwKCAjwzY2bBhB6EiwAPpUpZsiJ_W5esy-00gWfd33FDlcOF80Jtk72M5JPuY06Q6eP7z-Borv0VxoCu6IQAvD_BwE)
+
+索引的类型
+- 唯一索引: 被索引的值全局唯一
+  - `db.user.createIndex({username: 1}, {unique: true})`
+  - collection中`_id`上默认有一个唯一索引
+- 稀疏索引(Sparse Index): 仅对集合中存在特定field的文档添加索引
+- multikey index: 当给一个列表类型的字段添加索引时，mongo会分别为数组中的每一项创建多个索引。
+- hash index: 通过hash函数确定索引的位置。
+  - hash index存在的限制:
+    - 不支持范围查询
+    - 不支持多键hash
+    - 浮点数会被转换为整数。即4.2和4.3有相同的哈希索引
+  - hash index的优点
+    - 索引是均匀分布的。更适合分片存储
+- 空间索引
+
+### explain
+
+- explain(true): 输出查询分析
+- hint(): 强制查询使用给定索引

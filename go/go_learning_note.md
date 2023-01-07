@@ -3,8 +3,8 @@
 TODO:
 - [ ] what is addressalbe
 - [ ] 结构体之间使用`==`进行比较时，到底是如何比较的。
-- [x] go中指向指针的指针是合法的。 
-
+- [x] go中指向指针的指针是合法的。
+- [ ] go get的包都下载到那里去了
 
 ## 基本
 
@@ -190,4 +190,29 @@ method set(方法集)。
 ### 通道
 
 
+## 包结构
 
+workspace:
+- src: 源码
+- bin: 由源码生成的可执行文件
+- pkg:
+
+环境变量
+- gopath
+  - go get/install安装依赖的地方
+  - 从go1.8之后，gopath不再被设置，默认为`$HOME/go`
+- goroot
+  - go的标准依赖的存放地址
+- gobin
+  - workspace下可执行文件的安装地址，方便可执行文件被查找
+
+### go module
+
+- go中允许一个依赖的不同版本同时存在，不过需要在import的路径之后添加版本。例如`import "rsc.io/quote/v3"`
+- go mod tidy
+  - 发现项目中使用了，但在go.mod中不存在的依赖，并安装
+  - 安全删除不在使用的依赖
+
+  > 建议每次修改依赖之后，执行一下`go mod tidy`
+
+[managing dependencies](https://go.dev/doc/modules/managing-dependencies)

@@ -14,3 +14,23 @@
   - middleware必须接受一个request对象，并且返回一个response对象。
 - [x] how to install a middleware to app
   - setting.MIDDLEWARE
+
+
+## signal
+
+django中使用Signal了进行功能解耦。用户可以定义一个Signal，之后可以向Signal发送数据，并注册一个回调函数。
+
+注册回调函数有两种方式
+- signal.connent(my_callback)
+- 通过receiver装饰器
+  ```py
+  from django.dispatch import receiver
+
+  @receiver
+  def my_callback(sender, **kwargs):
+    pass
+  ```
+
+signal callback的注册时机及方式: 对应于回调函数的注册方式
+- 如果使用`connent`，官方推荐放在AppConfig.ready中
+- 如果使用`receiver`, 需要在AppConfig.ready中import所有的回调函数。

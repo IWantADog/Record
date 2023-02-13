@@ -19,7 +19,7 @@
 - 删除pod时，每次仅删除一个pod。并且当pod中有不健康的pod时，`StatefulSets`不会执行删除pod的操作，因为如果这个时候删除pod会同时失去两个pod，有可能造成数据的丢失。
 
 ### 为每个pod提供各自的存储空间
-- 删除`StatefulSet`pod是，pod上绑定的`PersistentVolumnClain`并不会被删除。应为`StatefulSet`是有状态的，所以数据并不会随pod一起消失。如果确定需要删除，则需要手动删除`PV`。
+- 删除`StatefulSet`pod时，pod上绑定的`PersistentVolumnClain`并不会被删除。因为`StatefulSet`是有状态的，所以数据并不会随pod一起消失。如果确定需要删除，则需要手动删除`PV`。
 - 使用`StatefulSet`时如果减少了pod的数量，被删除pod对应的`pvc`在pod被删除之后并不会被删除。而且该`pvc`可以被新pod重新使用。
 
 
@@ -40,7 +40,7 @@ kubernetes创建`headless service`时，会同时创建多个`SRV`记录指向`s
 
 ## StatefulSets处理node异常
 
-当一个node(wroker)无法访问时，获取这个node(wroker)上所有pod的状态会显示为`Unknown`。如果pod为`Unknow`状态的时间超过了1分钟（可配置）。pod的资源会被`master node`回收。之后当`kubectl`看到pod被标记为`deletion`后，才会开始中止node上的运行的pod。当wroker上的kubectl中止pod后，会通知api server，整个流程结束。
+当一个node(worker)无法访问时，获取这个node(worker)上所有pod的状态会显示为`Unknown`。如果pod为`Unknown`状态的时间超过了1分钟（可配置）。pod的资源会被`master node`回收。之后当`kubectl`看到pod被标记为`deletion`后，才会开始中止node上的运行的pod。当worker上的kubectl中止pod后，会通知api server，整个流程结束。
 
-对于永久无法重新连接的`wroker`，唯一的处理方法就是手动删除指定的pod。之后pod会被重新创建。
+对于永久无法重新连接的`worker`，唯一的处理方法就是手动删除指定的pod。之后pod会被重新创建。
 

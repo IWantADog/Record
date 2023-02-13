@@ -36,7 +36,7 @@ kubernetes创建`headless service`时，会同时创建多个`SRV`记录指向`s
 使用`kubectl edit statefulset <name>`打开默认的编辑器，对文件进行修改。
 
 对`StatefulSet`的修改类似于对`ReplicaSets`的修改，只会影响之后创建的pod。如果想要更新旧pod只能手动删除旧pod。
-> 从1.7开始，kubernetes支持像`Deplouments`那样更新pod，需要配置`spec.updateStrategy`字段。
+> 从1.7开始，kubernetes支持像`Deployments`那样更新pod，需要配置`spec.updateStrategy`字段。
 
 ## StatefulSets处理node异常
 

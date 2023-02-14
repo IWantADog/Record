@@ -19,7 +19,7 @@
 - 删除pod时，每次仅删除一个pod。并且当pod中有不健康的pod时，`StatefulSets`不会执行删除pod的操作，因为如果这个时候删除pod会同时失去两个pod，有可能造成数据的丢失。
 
 ### 为每个pod提供各自的存储空间
-- 删除`StatefulSet`pod时，pod上绑定的`PersistentVolumnClain`并不会被删除。因为`StatefulSet`是有状态的，所以数据并不会随pod一起消失。如果确定需要删除，则需要手动删除`PV`。
+- 删除`StatefulSet`pod时，pod上绑定的`PersistentVolumeClaim`并不会被删除。因为`StatefulSet`是有状态的，所以数据并不会随pod一起消失。如果确定需要删除，则需要手动删除`PV`。
 - 使用`StatefulSet`时如果减少了pod的数量，被删除pod对应的`pvc`在pod被删除之后并不会被删除。而且该`pvc`可以被新pod重新使用。
 
 

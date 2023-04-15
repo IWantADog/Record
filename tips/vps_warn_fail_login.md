@@ -120,3 +120,7 @@ Host sshtest
 `cat /etc/centos-release`
 
 `uname -r`
+
+## 简单点的话
+1. 创建一个新用户
+2. 仅允许该用户通过ssh登陆

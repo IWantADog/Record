@@ -132,6 +132,13 @@ push: nats server主动向client发送数据。官方更推荐push + ephemeral�
 - 如果消息处理的比较慢，可以适当降低MaxAckPending的值，并且AckWait从而避免消息重发。
 
 
+*BackOff & MaxDeliver*
+
+MaxDeliver: 对于未被ack的消息的最大的重发次数。*-1*代表重新发送知道被ack。对于达到最大重试次数的数据但未被ack的数据，将会留在stream中。
+
+BackOff: 用于处理未被ack和ack超时的数据。如果配置会覆盖*AckWait*。实际的配置值是一个列表。列表的长度必须小于*MaxDeliver*。如果BackOff未设置，消息会被立即重试。
+
+
 ### subject mapping和分片
 
 支持对subject进行分离，并提取子字符串，或调整token的位置。

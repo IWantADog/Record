@@ -232,3 +232,17 @@ es的文档中有定义一个*_version*字段。当对文档进行更新、索�
   PUT my_index_001/_doc/123?if_seq_no=0&if_primary_term=1
   {}
   ```
+
+## 问题
+
+1. 索引别名会不会有性能损耗？
+
+2. 聚合如何使用？
+
+3. 内部数据结构清楚
+
+
+## 相关文献
+
+https://www.elastic.co/guide/cn/elasticsearch/guide/current/index.html
+

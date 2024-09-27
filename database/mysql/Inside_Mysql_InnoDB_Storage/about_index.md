@@ -61,3 +61,13 @@ innodb的全文索引采用了*full inverted index*的方式实现。其全文�
 auxiliary table是持久的表，存放在磁盘上，当同时InnoDB的全文索引中有另一个重要的概念*FTS Index Cache（全文检索索引缓存）*，用来提高全文索引的性能。
 
 FTS Index Cache是一个红黑树结构，其根据(word, ilist)进行排序。当插入新数据时，会先更新*FTS index cache*，但时Auxiliary table并不会立即更新。InnoDB存储引擎会对Auxiliay table进行批量更新。当对全文索引进行查询时，Auxiliary Table首先会将FTS Index Cache中对应的word字段合并到Auxiliary table中，然后在进行查询。
+
+## 什么是B+树
+
+B树是一种多叉树，每个节点最多可以包含M个子节点，M就是B树的阶。
+
+对于阶为M的树，每个内部节点最多有M-1个元素和M个子节点。
+
+### 特点
+
+- 两种节点。内部节点，叶子节点。内部节点不保存完整数据，仅仅用于索引，所有数据存储在叶子结点。并且所有叶子结点包含下一个叶子结点的指针，按大到小排列。

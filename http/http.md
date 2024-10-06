@@ -133,3 +133,26 @@ https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Content_negotiation
 ## xss
 
 https://stackoverflow.com/questions/239194/how-does-xss-work
+
+
+## cookie & session & token
+
+cookie & session的出现都是为了解决http无状态，同时需要识别用户的问题。
+
+cookie
+- 数据存储：数据存放在客户端，数据量一般需要较小。
+- 适用范围：用户习惯设置、广告跟踪。
+- 过期策略：
+  - 持久化cookie：长期存储，设置过去时间
+  - 会话cookie：浏览器关闭数据则失效。
+
+### cookie的获取方式
+
+客户端发送请求，服务端响应请求，并返回Set-Cookie内容。后续客户端发送个相同域的请求都携带Cookie的内容。
+
+> session本质还是依赖于cookie，不过数据和过期控制放到了服务端。服务端给客户端一个session_id，通过session_id获取对应的数据。
+
+### token
+- token是无状态的，所有的信息都存储在token中，服务端不需要单独存储token，也不需要单独在进行查库。
+- token可以通过http头部*Authorization: Bearer <token>*进行发送。
+- token主要包含三部分信息，header、payload、signature。
